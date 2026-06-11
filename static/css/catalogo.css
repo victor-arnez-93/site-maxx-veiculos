@@ -1,0 +1,468 @@
+/* ============================================================
+   MAXX VEÍCULOS — CATALOGO.CSS
+   Catálogo · Filtros · Grid · Resultados
+   ============================================================ */
+
+/* ==================== TOPO ==================== */
+
+.page-top {
+  position: relative;
+
+  padding: 180px 0 90px;
+
+  text-align: center;
+}
+
+.page-top::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255, 59, 47, 0.10),
+      transparent 60%
+    );
+
+  pointer-events: none;
+}
+
+.page-top .h-display {
+  margin-top: 14px;
+}
+
+.page-top .h-display em {
+  font-style: normal;
+  color: var(--primary);
+}
+
+.page-top .sub {
+  max-width: 700px;
+  margin: 18px auto 0;
+}
+
+/* ==================== LAYOUT ==================== */
+
+.catalogo-main {
+  position: relative;
+
+  padding: 0 0 100px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.35) 0%,
+      rgba(5, 5, 5, 0.85) 40%,
+      rgba(5, 5, 5, 1) 100%
+    ),
+    url('../img/imgfundo.png');
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+
+
+.stock-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 32px;
+
+  align-items: start;
+}
+
+/* ==================== FILTROS ==================== */
+.filters-card {
+  position: sticky;
+  top: 110px;
+
+  padding: 28px;
+
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+
+  background: rgba(10, 10, 10, 0.88);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.45);
+}
+
+.filters-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+}
+
+.filters-card-head h3 {
+  font-size: 18px;
+  font-family: var(--font-display);
+  color: var(--white);
+}
+
+.link-clear {
+  border: none;
+  background: none;
+
+  cursor: pointer;
+
+  color: var(--primary);
+  font-size: 13px;
+}
+
+.search-input-wrap {
+  margin-bottom: 20px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field-label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  color: var(--muted);
+}
+
+.input,
+.select {
+  width: 100%;
+}
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* ==================== TOOLBAR ==================== */
+.stock-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid var(--line);
+}
+
+.stock-count {
+  color: var(--muted);
+}
+
+.stock-count strong {
+  color: var(--white);
+  font-size: 20px;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-filters-mobile {
+  display: none;
+}
+
+/* ==================== CHIPS ==================== */
+
+.active-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  margin-bottom: 24px;
+}
+
+.active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 14px;
+
+  border: 1px solid var(--primary-line);
+  border-radius: 999px;
+
+  background: var(--primary-dim);
+
+  color: var(--white);
+
+  cursor: pointer;
+
+  transition: var(--trans);
+}
+
+.active-chip:hover {
+  border-color: var(--primary);
+}
+
+/* ==================== GRID ==================== */
+.stock-grid-2 {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(380px, 1fr)
+    );
+
+  gap: 28px;
+}
+
+/* ==================== CARD ==================== */
+
+.vehicle-card {
+  overflow: hidden;
+
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+
+  background: var(--surface);
+
+  transition: var(--trans);
+}
+
+.vehicle-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-line);
+}
+
+.vehicle-thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.vehicle-thumb img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition: 0.5s;
+}
+
+.vehicle-card:hover .vehicle-thumb img {
+  transform: scale(1.05);
+}
+
+.vehicle-body {
+  padding: 22px;
+}
+
+.vehicle-brand {
+  margin-bottom: 4px;
+
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.vehicle-title {
+  margin-bottom: 12px;
+
+  font-size: 24px;
+  font-family: var(--font-display);
+  color: var(--white);
+}
+
+.vehicle-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  margin-bottom: 20px;
+}
+
+.vehicle-specs span {
+  padding: 6px 10px;
+
+  border-radius: 999px;
+
+  background: var(--bg-2);
+
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.vehicle-price {
+  margin-bottom: 20px;
+
+  font-size: 32px;
+  font-weight: 700;
+
+  color: var(--white);
+}
+
+.vehicle-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* ==================== VAZIO ==================== */
+
+.empty-state {
+  padding: 80px 20px;
+
+  text-align: center;
+
+  border-radius: var(--radius);
+  border: 1px dashed var(--line);
+}
+
+.empty-state h3 {
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  color: var(--muted);
+}
+
+.select-order-wrap {
+  position: relative;
+  min-width: 240px;
+}
+
+.select-order-wrap::after {
+  content: '⌄';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-55%);
+  color: var(--primary);
+  pointer-events: none;
+  font-size: 18px;
+}
+
+.select-inline {
+  width: 100%;
+  height: 48px;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding: 0 44px 0 16px;
+
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+
+  background: rgba(10, 10, 10, 0.86);
+  color: var(--white);
+
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+
+  outline: none;
+  cursor: pointer;
+
+  transition: var(--trans);
+}
+
+.select-inline:hover,
+.select-inline:focus {
+  border-color: var(--primary-line);
+  box-shadow: 0 0 0 3px rgba(255, 59, 47, 0.10);
+}
+
+.select-inline option {
+  background: #111;
+  color: #fff;
+}
+
+/* ==================== RESPONSIVO ==================== */
+
+@media (max-width: 1180px) {
+
+  .stock-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .filters-card {
+    position: fixed;
+
+    top: 0;
+    left: -100%;
+
+    width: 340px;
+    height: 100vh;
+
+    overflow-y: auto;
+
+    z-index: 999;
+
+    transition: .3s;
+  }
+
+  .filters-card.open {
+    left: 0;
+  }
+
+  .btn-filters-mobile {
+    display: flex;
+  }
+
+  #closeFilters {
+    display: flex;
+  }
+
+  .stock-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .page-top {
+    padding: 120px 0 50px;
+  }
+
+  .stock-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-right {
+    width: 100%;
+  }
+
+  .select-inline {
+    flex: 1;
+  }
+
+  .stock-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .vehicle-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .filters-card {
+    width: 100%;
+  }
+
+  .page-top .h-display {
+    font-size: 42px;
+  }
+}

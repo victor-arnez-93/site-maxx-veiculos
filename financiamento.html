@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Financiamento — Maxx Veículos</title>
+  <meta name="description" content="Simule o financiamento do seu próximo veículo em segundos. Entrada flexível, parcelas que cabem no bolso e atendimento rápido.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/main.css">
+  <link rel="stylesheet" href="static/css/financiamento.css">
+</head>
+
+<body>
+
+  <nav class="navbar solid" id="navbar">
+    <a href="index.html" class="nav-logo" aria-label="Maxx Veículos">
+      <img src="static/img/logo1.png" alt="Maxx Veículos">
+    </a>
+
+    <div class="nav-center">
+      <a href="index.html" class="nav-link">Início</a>
+      <a href="catalogo.html" class="nav-link">Catálogo</a>
+      <a href="financiamento.html" class="nav-link active">Financiamento</a>
+      <a href="contato.html" class="nav-link">Contato</a>
+    </div>
+
+    <div class="nav-right">
+      <a href="index.html#busca" class="btn btn-primary btn-sm">
+        Encontrar Veículo
+      </a>
+
+      <button class="nav-burger" id="navBurger" type="button" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="navMobile">
+    <a href="index.html" class="nav-link">Início</a>
+    <a href="catalogo.html" class="nav-link">Catálogo</a>
+    <a href="financiamento.html" class="nav-link active">Financiamento</a>
+    <a href="contato.html" class="nav-link">Contato</a>
+    <a href="index.html#busca" class="btn btn-primary">Encontrar Veículo</a>
+  </div>
+
+  <header class="page-top financiamento-top">
+    <div class="container">
+      <span class="eyebrow">Simulação online</span>
+      <h1 class="h-display">
+        Financie em <em>minutos</em>
+      </h1>
+      <p class="sub">
+        Ajuste entrada e prazo, veja a parcela estimada na hora e envie a simulação direto para a nossa equipe.
+      </p>
+    </div>
+  </header>
+
+  <main class="financiamento-main">
+    <div class="container">
+
+      <div class="fin-layout">
+
+        <section class="fin-card">
+          <div id="finVehicle"></div>
+
+          <div class="fin-fields">
+
+            <div class="field">
+              <label class="field-label" for="finValor">Valor do veículo</label>
+              <input class="input" id="finValor" inputmode="numeric" placeholder="R$ 80.000" autocomplete="off">
+            </div>
+
+            <div class="field">
+              <label class="field-label">
+                Entrada — <span id="entradaPct">20%</span>
+              </label>
+
+              <div class="range-row">
+                <input type="range" class="range" id="finEntrada" min="0" max="90" step="5" value="20">
+                <span class="range-val" id="entradaVal">R$ 16.000</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Prazo (meses)</label>
+
+              <div class="term-grid" id="termGrid">
+                <button type="button" class="term-btn" data-n="12">12×</button>
+                <button type="button" class="term-btn" data-n="24">24×</button>
+                <button type="button" class="term-btn" data-n="36">36×</button>
+                <button type="button" class="term-btn active" data-n="48">48×</button>
+                <button type="button" class="term-btn" data-n="60">60×</button>
+                <button type="button" class="term-btn" data-n="72">72×</button>
+              </div>
+            </div>
+
+          </div>
+
+          <p class="fin-note">
+            Simulação meramente ilustrativa com taxa de referência de <b id="taxaLabel">1,49% a.m.</b>.
+            A taxa final depende da análise de crédito e pode variar conforme o banco parceiro.
+          </p>
+        </section>
+
+        <aside class="fin-result">
+          <div class="fin-big">
+            <small>Parcela estimada</small>
+            <strong>
+              <em id="parcelasOut">48×</em>
+              <span id="parcelaOut">R$ —</span>
+            </strong>
+          </div>
+
+          <div class="fin-rows">
+            <div class="fin-row">
+              <span>Valor do veículo</span>
+              <b id="rowValor">—</b>
+            </div>
+
+            <div class="fin-row">
+              <span>Entrada</span>
+              <b id="rowEntrada">—</b>
+            </div>
+
+            <div class="fin-row">
+              <span>Valor financiado</span>
+              <b id="rowFinanciado">—</b>
+            </div>
+
+            <div class="fin-row">
+              <span>Total do financiamento</span>
+              <b id="rowTotal">—</b>
+            </div>
+          </div>
+
+          <a href="#" class="btn btn-whatsapp btn-lg btn-block" id="finWa">
+            <svg class="wa-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.570-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
+            Enviar simulação no WhatsApp
+          </a>
+
+          <p class="fin-note fin-note-center">
+            Sem compromisso. Nossa equipe retorna com as condições reais.
+          </p>
+        </aside>
+
+      </div>
+
+      <section class="section-tight fin-steps-section">
+        <div class="section-head center reveal">
+          <span class="eyebrow center">Simples assim</span>
+          <h2 class="h-section">Como funciona</h2>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card reveal">
+            <span class="step-num">01</span>
+            <h4>Simule online</h4>
+            <p>
+              Escolha o veículo, ajuste entrada e prazo e veja a parcela estimada em segundos.
+            </p>
+          </div>
+
+          <div class="step-card reveal">
+            <span class="step-num">02</span>
+            <h4>Envie pelo WhatsApp</h4>
+            <p>
+              Sua simulação chega direto à nossa equipe, que busca a melhor taxa nos bancos parceiros.
+            </p>
+          </div>
+
+          <div class="step-card reveal">
+            <span class="step-num">03</span>
+            <h4>Aprove e acelere</h4>
+            <p>
+              Com o crédito aprovado, cuidamos de toda a documentação. Você só busca a chave.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-logo">
+          <img src="static/img/logo1.png" alt="Maxx Veículos">
+          <p class="footer-about">
+            Veículos selecionados com qualidade, procedência e garantia. Atendimento premium do primeiro contato à entrega.
+          </p>
+        </div>
+
+        <div>
+          <h5 class="footer-title">Links rápidos</h5>
+          <div class="footer-links">
+            <a href="catalogo.html">Catálogo</a>
+            <a href="financiamento.html">Financiamento</a>
+            <a href="contato.html">Contato</a>
+            <a href="index.html#busca">Encontrar Veículo</a>
+          </div>
+        </div>
+
+        <div>
+          <h5 class="footer-title">Contato</h5>
+          <div class="footer-links">
+            <span>Endereço a definir</span>
+            <a href="#">Telefone a definir</a>
+            <a href="#" data-wa="Olá! Vim pelo site da Maxx Veículos.">WhatsApp</a>
+            <a href="#">contato@maxxveiculos.com.br</a>
+          </div>
+        </div>
+
+        <div>
+          <h5 class="footer-title">Atendimento</h5>
+          <div class="footer-links">
+            <span>Seg–Sex: 8h às 18h</span>
+            <span>Sábado: 8h às 13h</span>
+            <a href="admin/login.html">Área Restrita</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Maxx Veículos. Todos os direitos reservados.</p>
+        <p>Desenvolvido por <a href="https://crvsolucoesti.com/" target="_blank" rel="noopener">CRV Soluções em TI</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#" class="wa-float" data-wa="Olá! Preciso de ajuda com financiamento." aria-label="Falar no WhatsApp">
+    <svg class="wa-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.570-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+  </a>
+
+  <script src="static/js/main.js"></script>
+  <script src="static/js/financiamento.js"></script>
+</body>
+</html>

@@ -1,0 +1,433 @@
+/* ============================================================
+   MAXX VEÍCULOS — FINANCIAMENTO.CSS
+   Simulador · Resultado · Como funciona
+   ============================================================ */
+
+/* ==================== TOPO ==================== */
+
+.financiamento-top {
+  position: relative;
+  padding: 160px 0 55px;
+}
+
+.financiamento-top::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 25% 35%,
+      rgba(255, 59, 47, 0.12),
+      transparent 38%
+    );
+
+  pointer-events: none;
+}
+
+.financiamento-top .container {
+  position: relative;
+  z-index: 2;
+}
+
+.financiamento-top .h-display {
+  margin-top: 14px;
+}
+
+.financiamento-top .h-display em {
+  font-style: normal;
+  color: var(--primary);
+}
+
+/* ==================== MAIN ==================== */
+
+.financiamento-main {
+  position: relative;
+  padding-bottom: 90px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.45) 0%,
+      rgba(5, 5, 5, 0.92) 45%,
+      var(--bg) 100%
+    ),
+    url('../img/imgfundo.png');
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.fin-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+
+  align-items: start;
+}
+
+/* ==================== CARD FORM ==================== */
+
+.fin-card,
+.fin-result,
+.step-card {
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+
+  background: rgba(12, 12, 12, 0.88);
+  backdrop-filter: blur(18px);
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .42);
+}
+
+.fin-card {
+  padding: 34px;
+}
+
+.fin-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+#entradaPct {
+  color: var(--primary);
+}
+
+#taxaLabel {
+  color: var(--text);
+}
+
+/* ==================== RANGE ==================== */
+
+.range-row {
+  display: grid;
+  grid-template-columns: 1fr 130px;
+  gap: 18px;
+  align-items: center;
+}
+
+.range {
+  width: 100%;
+  height: 5px;
+
+  appearance: none;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--primary) var(--fill, 20%),
+      rgba(255, 255, 255, .12) var(--fill, 20%)
+    );
+
+  outline: none;
+}
+
+.range::-webkit-slider-thumb {
+  appearance: none;
+
+  width: 20px;
+  height: 20px;
+
+  border-radius: 50%;
+
+  background: var(--white);
+  border: 4px solid var(--primary);
+
+  box-shadow: 0 0 18px rgba(255, 59, 47, .65);
+
+  cursor: pointer;
+}
+
+.range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+
+  border-radius: 50%;
+
+  background: var(--white);
+  border: 4px solid var(--primary);
+
+  box-shadow: 0 0 18px rgba(255, 59, 47, .65);
+
+  cursor: pointer;
+}
+
+.range-val {
+  text-align: right;
+
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ==================== PRAZOS ==================== */
+
+.term-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.term-btn {
+  height: 48px;
+
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-2);
+
+  background: rgba(255, 255, 255, .035);
+
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: var(--trans);
+}
+
+.term-btn:hover {
+  color: var(--white);
+  border-color: var(--primary-line);
+}
+
+.term-btn.active {
+  color: var(--white);
+
+  border-color: var(--primary);
+  background: var(--primary);
+
+  box-shadow: 0 0 22px rgba(255, 59, 47, .35);
+}
+
+/* ==================== NOTA ==================== */
+
+.fin-note {
+  margin-top: 22px;
+
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.fin-note-center {
+  text-align: center;
+}
+
+/* ==================== RESULTADO ==================== */
+
+.fin-result {
+  position: sticky;
+  top: 105px;
+
+  padding: 38px;
+
+  border-color: var(--primary-line);
+
+  background:
+    radial-gradient(
+      circle at 20% 10%,
+      rgba(255, 59, 47, .12),
+      transparent 42%
+    ),
+    rgba(10, 10, 10, .92);
+}
+
+.fin-big small {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.fin-big strong {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: clamp(38px, 4vw, 56px);
+  line-height: 1;
+}
+
+.fin-big em {
+  font-style: normal;
+  color: var(--primary);
+  font-size: 26px;
+}
+
+.fin-rows {
+  margin: 34px 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.fin-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+
+  padding: 14px 0;
+
+  border-bottom: 1px solid var(--line);
+
+  color: var(--muted);
+}
+
+.fin-row b {
+  color: var(--white);
+}
+
+.fin-result .btn {
+  width: 100%;
+}
+
+/* ==================== VEÍCULO VINDO DO CATÁLOGO ==================== */
+
+.fin-vehicle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  margin-bottom: 24px;
+  padding: 12px;
+
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+
+  background: rgba(255, 255, 255, .035);
+}
+
+.fin-vehicle img {
+  width: 92px;
+  height: 64px;
+
+  border-radius: var(--radius-sm);
+
+  object-fit: cover;
+}
+
+.fin-vehicle small {
+  display: block;
+
+  color: var(--primary);
+  font-size: 11px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.fin-vehicle b {
+  color: var(--white);
+  font-family: var(--font-display);
+}
+
+/* ==================== COMO FUNCIONA ==================== */
+
+.fin-steps-section {
+  padding-top: 90px;
+  padding-bottom: 20px;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.step-card {
+  padding: 32px;
+}
+
+.step-num {
+  width: 40px;
+  height: 40px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 22px;
+
+  border-radius: 50%;
+  border: 1px solid var(--primary-line);
+
+  background: var(--primary-dim);
+
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.step-card h4 {
+  margin-bottom: 10px;
+
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+
+.step-card p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ==================== RESPONSIVO ==================== */
+
+@media (max-width: 1024px) {
+  .fin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .fin-result {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .financiamento-top {
+    padding: 130px 0 45px;
+  }
+
+  .fin-card,
+  .fin-result {
+    padding: 24px;
+  }
+
+  .term-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .range-row {
+    grid-template-columns: 1fr;
+  }
+
+  .range-val {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .fin-big strong {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .term-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

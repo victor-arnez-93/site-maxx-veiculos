@@ -1084,6 +1084,53 @@ textarea.input {
   z-index: 2;
 }
 
+.navbar {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(28, 24, 22, 0.72) 0%,
+      rgba(5, 5, 5, 0.70) 28%,
+      rgba(5, 5, 5, 0.54) 100%
+    );
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+
+  padding: 0 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.12),
+      rgba(255,255,255,.04)
+    );
+
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+
+.nav-logo img {
+  display: block;
+  filter:
+    brightness(1.12)
+    contrast(1.08);
+}
+
+.navbar.scrolled,
+.navbar.solid {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(30, 25, 22, 0.92) 0%,
+      rgba(8, 8, 8, 0.92) 32%,
+      rgba(5, 5, 5, 0.86) 100%
+    );
+}
+
 /* ==================== RESPONSIVO GLOBAL ==================== */
 @media (max-width: 1180px) {
   .v-grid {

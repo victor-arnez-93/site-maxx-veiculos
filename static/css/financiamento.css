@@ -64,7 +64,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 32px;
 
-  align-items: start;
+  align-items: stretch;
 }
 
 /* ==================== CARD FORM ==================== */
@@ -83,6 +83,7 @@
 
 .fin-card {
   padding: 34px;
+  height: 100%;
 }
 
 .fin-fields {
@@ -218,12 +219,17 @@
 }
 
 /* ==================== RESULTADO ==================== */
-
 .fin-result {
   position: sticky;
   top: 105px;
 
   padding: 38px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  height: 100%;
 
   border-color: var(--primary-line);
 
@@ -286,10 +292,6 @@
 
 .fin-row b {
   color: var(--white);
-}
-
-.fin-result .btn {
-  width: 100%;
 }
 
 /* ==================== VEÍCULO VINDO DO CATÁLOGO ==================== */
@@ -379,6 +381,65 @@
 .step-card p {
   color: var(--muted);
   line-height: 1.7;
+}
+
+.btn-wa-fin {
+  position: relative;
+
+  width: fit-content;
+  min-width: 380px;
+  margin: 0 auto;
+
+  background: transparent;
+  color: #ffffff;
+
+  border: 2px solid transparent;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 0 20px rgba(37, 211, 102, 0.10),
+    0 10px 30px rgba(18, 140, 126, 0.08);
+}
+
+.btn-wa-fin::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  padding: 2px;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    135deg,
+    #25D366 0%,
+    #1EBE5D 45%,
+    #128C7E 100%
+  );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+
+.btn-wa-fin:hover {
+  background: rgba(37, 211, 102, 0.05);
+
+  box-shadow:
+    0 0 30px rgba(37, 211, 102, 0.22),
+    0 0 50px rgba(18, 140, 126, 0.16);
+}
+
+@media (max-width: 480px) {
+  .btn-wa-fin {
+    min-width: 100%;
+  }
 }
 
 /* ==================== RESPONSIVO ==================== */

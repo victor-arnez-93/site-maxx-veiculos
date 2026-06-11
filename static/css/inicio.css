@@ -350,54 +350,14 @@
   gap: 14px;
 }
 
-.info-card,
 .contact-form-card,
-.map-card {
+.map-card,
+.quick-contact-card {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(12, 12, 12, 0.88);
   backdrop-filter: blur(18px);
   box-shadow: 0 20px 60px rgba(0,0,0,.38);
-}
-
-.info-card {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  padding: 20px 22px;
-  transition: var(--trans);
-}
-
-.info-card:hover {
-  border-color: var(--primary-line);
-  transform: translateY(-2px);
-}
-
-.contact-green {
-  color: var(--green);
-  border-color: rgba(37, 211, 102, .35);
-  background: rgba(37, 211, 102, .10);
-}
-
-.info-card small {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-}
-
-.info-card b {
-  display: block;
-  color: var(--white);
-  font-size: 15px;
-}
-
-.info-card span {
-  display: block;
-  color: var(--muted);
-  font-size: 12.5px;
 }
 
 .contact-form-card {
@@ -449,28 +409,6 @@
   border: 0;
   border-radius: var(--radius-md);
   filter: grayscale(1) invert(.92) contrast(.9);
-}
-
-@media (max-width: 1024px) {
-  .home-contact-layout,
-  .map-card {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .home-contact {
-    padding: 70px 0;
-  }
-
-  .contact-form-card,
-  .map-card {
-    padding: 24px;
-  }
-
-  .form-grid-2 {
-    grid-template-columns: 1fr;
-  }
 }
 
 .btn-instagram {
@@ -530,6 +468,145 @@
   height: 20px;
 
   flex-shrink: 0;
+}
+
+/* ==================== AJUSTES CONTATO / FOOTER ==================== */
+
+.quick-contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  padding: 28px;
+
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+
+  background: rgba(12, 12, 12, 0.88);
+  backdrop-filter: blur(18px);
+
+  box-shadow: 0 20px 60px rgba(0,0,0,.38);
+}
+
+.quick-wa-btn,
+.quick-instagram-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  min-height: 54px;
+  padding: 14px 18px;
+
+  border-radius: var(--radius-md);
+
+  font-family: var(--font-display);
+  font-weight: 700;
+
+  color: var(--white);
+  background: transparent;
+
+  transition: var(--trans);
+}
+
+.quick-wa-btn {
+  border: 2px solid var(--primary);
+}
+
+.quick-wa-btn:hover {
+  background: var(--primary);
+  box-shadow:
+    0 0 10px rgba(255, 59, 47, 0.75),
+    0 0 22px rgba(255, 59, 47, 0.35);
+}
+
+.quick-instagram-btn {
+  position: relative;
+  border: 2px solid transparent;
+  overflow: hidden;
+}
+
+.quick-instagram-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    135deg,
+    #f58529 0%,
+    #feda77 15%,
+    #dd2a7b 45%,
+    #8134af 70%,
+    #515bd4 100%
+  );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+
+.quick-instagram-btn:hover {
+  background: rgba(255,255,255,0.04);
+  box-shadow:
+    0 0 30px rgba(221, 42, 123, 0.25),
+    0 0 45px rgba(129, 52, 175, 0.18);
+}
+
+.footer-about {
+  text-align: justify;
+}
+
+.btn-wa-form {
+  position: relative;
+  width: 320px !important;
+  margin: 0 auto;
+  display: flex;
+  background: transparent !important;
+  color: #ffffff;
+  border: 2px solid transparent !important;
+  overflow: hidden;
+  box-shadow:
+    0 0 20px rgba(37, 211, 102, 0.10),
+    0 10px 30px rgba(18, 140, 126, 0.08);
+}
+
+.btn-wa-form::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  padding: 2px;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    135deg,
+    #25D366 0%,
+    #1EBE5D 45%,
+    #128C7E 100%
+  );
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+
+.btn-wa-form:hover {
+  background: rgba(37, 211, 102, 0.05) !important;
+
+  box-shadow:
+    0 0 30px rgba(37, 211, 102, 0.22),
+    0 0 50px rgba(18, 140, 126, 0.16);
 }
 
 /* ==================== RESPONSIVO HOME ==================== */

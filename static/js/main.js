@@ -6,7 +6,7 @@
 const MAXX = {
   STORAGE_KEY: 'maxx-veiculos-estoque',
 
-  WHATSAPP: '5511999999999',
+  WHATSAPP: '5515997837725',
 
   formatMoney(valor) {
     const numero = Number(valor || 0);

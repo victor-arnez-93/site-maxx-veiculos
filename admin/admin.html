@@ -21,7 +21,6 @@
 
     <nav class="admin-menu">
       <a href="#estoque" class="active">Estoque</a>
-      <a href="../index.html">Ver site</a>
       <button type="button" id="logoutBtn">Sair</button>
     </nav>
   </aside>
@@ -33,9 +32,6 @@
         <h1>Estoque de veículos</h1>
       </div>
 
-      <button class="admin-btn admin-btn-primary" id="novoVeiculoBtn">
-        + Novo veículo
-      </button>
     </header>
 
     <section class="admin-stats">
@@ -132,16 +128,40 @@
       <form id="veiculoForm" class="admin-form">
         <input type="hidden" id="veiculoId">
 
-        <div class="admin-form-grid">
-          <label>
-            <span>Marca</span>
-            <input id="marca" required>
-          </label>
+<div class="admin-form-grid">
+<label>
+  <span>Marca</span>
 
-          <label>
-            <span>Modelo</span>
-            <input id="modelo" required>
-          </label>
+  <select id="marcaSelect" required>
+    <option value="">Selecione</option>
+    <option>Chevrolet</option>
+    <option>Volkswagen</option>
+    <option>Fiat</option>
+    <option>Toyota</option>
+    <option>Honda</option>
+    <option>Hyundai</option>
+    <option>Jeep</option>
+    <option>Renault</option>
+    <option>Nissan</option>
+    <option>Ford</option>
+    <option>BMW</option>
+    <option>Mercedes-Benz</option>
+    <option>Audi</option>
+    <option value="outros">Outros</option>
+  </select>
+
+  <input id="marcaOutro" type="text" placeholder="Digite a marca" class="admin-extra-input">
+</label>
+
+<label>
+  <span>Modelo</span>
+
+  <select id="modeloSelect" required>
+    <option value="">Selecione a marca primeiro</option>
+  </select>
+
+  <input id="modeloOutro" type="text" placeholder="Digite o modelo" class="admin-extra-input">
+</label>
 
           <label>
             <span>Versão</span>

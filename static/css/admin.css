@@ -225,7 +225,7 @@
 
 .admin-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 18px;
 
   margin-bottom: 24px;
@@ -285,6 +285,49 @@
   font-size: 38px;
   font-weight: 700;
   line-height: 1;
+}
+
+/* ==================== AÇÕES RÁPIDAS ==================== */
+
+.admin-quick {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+
+  margin-bottom: 24px;
+  padding: 24px 26px;
+
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255,59,47,.10), transparent 28%),
+    linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.025)),
+    rgba(12,12,12,.86);
+
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow);
+}
+
+.admin-quick h2 {
+  margin-bottom: 5px;
+
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.admin-quick p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.admin-quick-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 /* ==================== PAINEL ==================== */
@@ -732,6 +775,15 @@
   padding-top: 10px;
 }
 
+.admin-hidden-field {
+  display: none;
+}
+
+.admin-extra-input {
+  display: none;
+  margin-top: 8px;
+}
+
 /* ==================== RESPONSIVO ==================== */
 
 @media (max-width: 1024px) {
@@ -775,11 +827,12 @@
 }
 
 @media (max-width: 720px) {
-  .admin-topbar,
-  .admin-panel-head {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.admin-topbar,
+.admin-panel-head,
+.admin-quick {
+  flex-direction: column;
+  align-items: stretch;
+}
 
   .admin-menu {
     grid-template-columns: 1fr;

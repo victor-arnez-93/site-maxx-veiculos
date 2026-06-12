@@ -1,6 +1,6 @@
 /* ============================================================
    MAXX VEÍCULOS — ADMIN.JS
-   Supabase Auth · CRUD veículos · Storage fotos
+   Supabase Auth · CRUD veículos · Storage fotos · Filtros
    ============================================================ */
 
 const supabaseClient = window.MAXX_SUPABASE;
@@ -35,6 +35,13 @@ const adminEmpty = document.getElementById('adminEmpty');
 const buscaAdmin = document.getElementById('buscaAdmin');
 const modalTitle = document.getElementById('modalTitle');
 
+const filtroStatusAdmin = document.getElementById('filtroStatusAdmin');
+const filtroDestaqueAdmin = document.getElementById('filtroDestaqueAdmin');
+const filtroCondicaoAdmin = document.getElementById('filtroCondicaoAdmin');
+const filtroMarcaAdmin = document.getElementById('filtroMarcaAdmin');
+const filtroAnoAdmin = document.getElementById('filtroAnoAdmin');
+const filtroOrdemAdmin = document.getElementById('filtroOrdemAdmin');
+
 const statTotal = document.getElementById('statTotal');
 const statDisponiveis = document.getElementById('statDisponiveis');
 const statVendidos = document.getElementById('statVendidos');
@@ -51,6 +58,9 @@ const anoInput = document.getElementById('ano');
 const kmInput = document.getElementById('km');
 const precoInput = document.getElementById('preco');
 
+const corInput = document.getElementById('cor');
+const versaoInput = document.getElementById('versao');
+
 const modelosPorMarca = {
   Chevrolet: ['Onix', 'Onix Plus', 'Tracker', 'Cruze', 'Spin', 'S10', 'Montana', 'Equinox', 'Outros'],
   Volkswagen: ['Gol', 'Polo', 'Virtus', 'T-Cross', 'Nivus', 'Saveiro', 'Jetta', 'Taos', 'Amarok', 'Outros'],
@@ -59,8 +69,9 @@ const modelosPorMarca = {
   Honda: ['Civic', 'City', 'Fit', 'HR-V', 'WR-V', 'CR-V', 'Outros'],
   Hyundai: ['HB20', 'HB20S', 'Creta', 'Tucson', 'Santa Fe', 'Outros'],
   Jeep: ['Renegade', 'Compass', 'Commander', 'Wrangler', 'Outros'],
-  Renault: ['Kwid', 'Sandero', 'Logan', 'Duster', 'Oroch', 'Captur', 'Outros'],
+  Renault: ['Kwid', 'Sandero', 'Logan', 'Duster', 'Oroch', 'Captur', 'Kardian', 'Outros'],
   Nissan: ['Kicks', 'Versa', 'Sentra', 'Frontier', 'March', 'Outros'],
+  Chery: ['Tiggo 2', 'Tiggo 3X', 'Tiggo 5X', 'Tiggo 7', 'Tiggo 8', 'Outros'],
   Ford: ['Ka', 'Ka Sedan', 'EcoSport', 'Ranger', 'Territory', 'Fusion', 'Outros'],
   Peugeot: ['208', '2008', '3008', 'Partner', 'Outros'],
   Citroën: ['C3', 'C4 Cactus', 'Aircross', 'Jumpy', 'Outros'],
@@ -72,6 +83,35 @@ const modelosPorMarca = {
 };
 
 let veiculos = [];
+
+/* ==================== TEXTO / NORMALIZAÇÃO ==================== */
+
+function capitalizarTexto(valor) {
+  return String(valor || '')
+    .trim()
+    .toLowerCase()
+    .split(' ')
+    .filter(Boolean)
+    .map((palavra) => {
+      const excecoes = ['de', 'da', 'do', 'das', 'dos', 'e'];
+      if (excecoes.includes(palavra)) return palavra;
+      return palavra.charAt(0).toUpperCase() + palavra.slice(1);
+    })
+    .join(' ');
+}
+
+function normalizarVeiculoTexto() {
+  if (marcaOutro) marcaOutro.value = capitalizarTexto(marcaOutro.value);
+  if (modeloOutro) modeloOutro.value = capitalizarTexto(modeloOutro.value);
+  if (corInput) corInput.value = capitalizarTexto(corInput.value);
+  if (versaoInput) versaoInput.value = capitalizarTexto(versaoInput.value);
+}
+
+[marcaOutro, modeloOutro, corInput, versaoInput].forEach((campo) => {
+  campo?.addEventListener('blur', () => {
+    campo.value = capitalizarTexto(campo.value);
+  });
+});
 
 /* ==================== MARCA / MODELO ==================== */
 
@@ -111,13 +151,13 @@ function preencherModelos(marca) {
 
 function obterMarcaAtual() {
   return marcaSelect.value === 'outros'
-    ? marcaOutro.value.trim()
+    ? capitalizarTexto(marcaOutro.value)
     : marcaSelect.value;
 }
 
 function obterModeloAtual() {
   return modeloSelect.value === 'Outros'
-    ? modeloOutro.value.trim()
+    ? capitalizarTexto(modeloOutro.value)
     : modeloSelect.value;
 }
 
@@ -228,6 +268,16 @@ function obterUrlPublicaFoto(path) {
   return data.publicUrl;
 }
 
+function classificarCondicao(veiculo) {
+  const anoAtual = new Date().getFullYear();
+  const ano = Number(veiculo.ano || 0);
+  const km = Number(veiculo.km || 0);
+
+  if (ano >= anoAtual && km <= 1000) return 'novo';
+  if (ano >= anoAtual - 3 && km <= 60000) return 'seminovo';
+  return 'usado';
+}
+
 /* ==================== SUPABASE ==================== */
 
 async function carregarVeiculos() {
@@ -243,6 +293,8 @@ async function carregarVeiculos() {
   }
 
   veiculos = data || [];
+
+  popularFiltrosAdmin();
   renderizarVeiculos();
 }
 
@@ -353,15 +405,17 @@ function fecharModal() {
 /* ==================== FORM ==================== */
 
 function obterDadosFormulario(galeriaFinal = []) {
+  normalizarVeiculoTexto();
+
   return {
     marca: obterMarcaAtual(),
     modelo: obterModeloAtual(),
-    versao: document.getElementById('versao').value.trim(),
+    versao: capitalizarTexto(document.getElementById('versao').value),
     ano: converterNumeroBR(document.getElementById('ano').value),
     km: converterNumeroBR(document.getElementById('km').value),
     cambio: document.getElementById('cambio').value,
     combustivel: document.getElementById('combustivel').value,
-    cor: document.getElementById('cor').value.trim(),
+    cor: capitalizarTexto(document.getElementById('cor').value),
     preco: converterPrecoBR(document.getElementById('preco').value),
     descricao: document.getElementById('descricao').value.trim(),
     opcionais: document.getElementById('opcionais').value.trim(),
@@ -374,15 +428,103 @@ function obterDadosFormulario(galeriaFinal = []) {
   };
 }
 
+/* ==================== FILTROS ADMIN ==================== */
+
+function popularFiltrosAdmin() {
+  if (!filtroMarcaAdmin || !filtroAnoAdmin) return;
+
+  const marcaAtual = filtroMarcaAdmin.value;
+  const anoAtual = filtroAnoAdmin.value;
+
+  const marcas = [...new Set(veiculos.map(v => v.marca).filter(Boolean))].sort();
+  const anos = [...new Set(veiculos.map(v => Number(v.ano || 0)).filter(Boolean))].sort((a, b) => b - a);
+
+  filtroMarcaAdmin.innerHTML = '<option value="">Marca: Todas</option>';
+  filtroAnoAdmin.innerHTML = '<option value="">Ano: Todos</option>';
+
+  marcas.forEach((marca) => {
+    filtroMarcaAdmin.insertAdjacentHTML('beforeend', `<option value="${marca}">${marca}</option>`);
+  });
+
+  anos.forEach((ano) => {
+    filtroAnoAdmin.insertAdjacentHTML('beforeend', `<option value="${ano}">${ano}</option>`);
+  });
+
+  filtroMarcaAdmin.value = marcaAtual;
+  filtroAnoAdmin.value = anoAtual;
+}
+
+function obterVeiculosFiltrados() {
+  const termo = buscaAdmin?.value.trim().toLowerCase() || '';
+  const status = filtroStatusAdmin?.value || '';
+  const destaque = filtroDestaqueAdmin?.value || '';
+  const condicao = filtroCondicaoAdmin?.value || '';
+  const marca = filtroMarcaAdmin?.value || '';
+  const ano = filtroAnoAdmin?.value || '';
+  const ordem = filtroOrdemAdmin?.value || 'recentes';
+
+  let filtrados = veiculos.filter((veiculo) => {
+    const texto = [
+      veiculo.marca,
+      veiculo.modelo,
+      veiculo.versao,
+      veiculo.ano,
+      veiculo.km,
+      veiculo.preco,
+      veiculo.cor,
+      veiculo.cambio,
+      veiculo.combustivel
+    ].join(' ').toLowerCase();
+
+    if (termo && !texto.includes(termo)) return false;
+
+    if (status === 'disponivel' && veiculo.vendido) return false;
+    if (status === 'vendido' && !veiculo.vendido) return false;
+    if (status === 'ativo' && veiculo.ativo === false) return false;
+    if (status === 'inativo' && veiculo.ativo !== false) return false;
+
+    if (destaque === 'sim' && !veiculo.destaque) return false;
+    if (destaque === 'nao' && veiculo.destaque) return false;
+
+    if (condicao && classificarCondicao(veiculo) !== condicao) return false;
+
+    if (marca && veiculo.marca !== marca) return false;
+    if (ano && String(veiculo.ano) !== String(ano)) return false;
+
+    return true;
+  });
+
+  filtrados = ordenarAdmin(filtrados, ordem);
+
+  return filtrados;
+}
+
+function ordenarAdmin(lista, ordem) {
+  return [...lista].sort((a, b) => {
+    switch (ordem) {
+      case 'preco-desc':
+        return Number(b.preco || 0) - Number(a.preco || 0);
+
+      case 'preco-asc':
+        return Number(a.preco || 0) - Number(b.preco || 0);
+
+      case 'ano-desc':
+        return Number(b.ano || 0) - Number(a.ano || 0);
+
+      case 'km-asc':
+        return Number(a.km || 0) - Number(b.km || 0);
+
+      case 'recentes':
+      default:
+        return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+    }
+  });
+}
+
 /* ==================== RENDER ==================== */
 
 function renderizarVeiculos() {
-  const termo = buscaAdmin.value.trim().toLowerCase();
-
-  const filtrados = veiculos.filter((veiculo) => {
-    const texto = `${veiculo.marca} ${veiculo.modelo} ${veiculo.versao} ${veiculo.ano}`.toLowerCase();
-    return texto.includes(termo);
-  });
+  const filtrados = obterVeiculosFiltrados();
 
   veiculosTable.innerHTML = '';
   adminEmpty.style.display = filtrados.length ? 'none' : 'block';
@@ -544,7 +686,19 @@ quickNovoVeiculoBtn?.addEventListener('click', () => abrirModal());
 
 fecharModalBtn?.addEventListener('click', fecharModal);
 cancelarBtn?.addEventListener('click', fecharModal);
-buscaAdmin?.addEventListener('input', renderizarVeiculos);
+
+[
+  buscaAdmin,
+  filtroStatusAdmin,
+  filtroDestaqueAdmin,
+  filtroCondicaoAdmin,
+  filtroMarcaAdmin,
+  filtroAnoAdmin,
+  filtroOrdemAdmin
+].forEach((campo) => {
+  campo?.addEventListener('input', renderizarVeiculos);
+  campo?.addEventListener('change', renderizarVeiculos);
+});
 
 veiculoForm?.addEventListener('submit', async (event) => {
   event.preventDefault();

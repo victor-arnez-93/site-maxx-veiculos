@@ -800,6 +800,167 @@
   font-size: 14px;
 }
 
+/* ==================== FILTROS ADMIN — ESTOQUE ==================== */
+
+.admin-filters {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(6, minmax(140px, 1fr));
+  gap: 12px;
+
+  margin-bottom: 22px;
+  padding: 18px;
+
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
+    rgba(5,5,5,.34);
+}
+
+.admin-filters input,
+.admin-filters select {
+  width: 100%;
+  height: 46px;
+
+  padding: 0 15px;
+
+  border-radius: 999px;
+  border: 1px solid var(--line);
+
+  color: var(--white);
+  background: rgba(255,255,255,.045);
+
+  font-family: var(--font-body);
+  font-size: 13px;
+
+  outline: none;
+  transition: var(--trans);
+}
+
+.admin-filters select {
+  appearance: none;
+  cursor: pointer;
+
+  padding-right: 38px;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath fill='none' stroke='%23ff3b2f' stroke-width='1.6' stroke-linecap='round' d='M1 1l4.5 4.5L10 1'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+}
+
+.admin-filters input::placeholder {
+  color: var(--muted-2);
+}
+
+.admin-filters input:focus,
+.admin-filters select:focus {
+  border-color: var(--primary-line);
+  background: var(--primary-dim);
+  box-shadow: 0 0 0 3px rgba(255,59,47,.08);
+}
+
+.admin-filters option {
+  background: #111;
+  color: #fff;
+}
+
+/* ==================== TABELA COM SCROLL INTERNO — 4 CARROS ==================== */
+
+.admin-table-wrap {
+  max-height: 452px;
+  overflow: auto;
+}
+
+.admin-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.admin-table th {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.035)),
+    #111;
+}
+
+.admin-table tbody tr {
+  height: 94px;
+}
+
+.admin-table-wrap::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.admin-table-wrap::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 59, 47, 0.45);
+}
+
+.admin-table-wrap::-webkit-scrollbar-track {
+  background: rgba(255,255,255,.04);
+}
+
+/* ==================== MOBILE ADMIN — FILTROS / TABELA ==================== */
+
+@media (max-width: 1280px) {
+  .admin-filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .admin-filters input {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 1024px) {
+  .admin-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-table-wrap {
+    max-height: 440px;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-panel {
+    padding: 20px 16px;
+  }
+
+  .admin-filters {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 10px;
+  }
+
+  .admin-filters input,
+  .admin-filters select {
+    height: 44px;
+    font-size: 13px;
+  }
+
+  .admin-table-wrap {
+    max-height: 520px;
+    border-radius: 18px;
+  }
+
+  .admin-table {
+    min-width: 860px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 13px 12px;
+  }
+
+  .admin-car-img {
+    width: 70px;
+    height: 50px;
+  }
+}
+
 /* ==================== RESPONSIVO ==================== */
 
 @media (max-width: 1024px) {

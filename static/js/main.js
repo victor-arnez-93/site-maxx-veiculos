@@ -271,10 +271,75 @@ const MAXX = {
     elementos.forEach((el) => observer.observe(el));
   },
 
+  initDesktopCarousel() {
+    const carousel = document.getElementById('featuredGrid');
+
+    if (!carousel) return;
+
+    let timer = null;
+    let paused = false;
+
+    const isDesktop = () => window.matchMedia('(min-width: 769px)').matches;
+
+    const stop = () => {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    };
+
+    const start = () => {
+      stop();
+
+      if (!isDesktop()) return;
+
+      timer = setInterval(() => {
+        if (paused) return;
+
+        const card = carousel.querySelector('.v-card');
+
+        if (!card) return;
+
+        const gap = 24;
+        const step = card.offsetWidth + gap;
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+
+        if (maxScroll <= 0) return;
+
+        if (carousel.scrollLeft >= maxScroll - 20) {
+          carousel.scrollTo({
+            left: 0,
+            behavior: 'smooth'
+          });
+
+          return;
+        }
+
+        carousel.scrollBy({
+          left: step,
+          behavior: 'smooth'
+        });
+      }, 6500);
+    };
+
+    carousel.addEventListener('mouseenter', () => {
+      paused = true;
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+      paused = false;
+    });
+
+    window.addEventListener('resize', start);
+
+    start();
+  },
+
   init() {
     this.initNavbar();
     this.initWhatsApp();
     this.initReveal();
+    this.initDesktopCarousel();
   }
 };
 

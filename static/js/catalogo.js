@@ -469,100 +469,140 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizar();
   }
 
-  function abrirModalVeiculo(veiculo) {
-    const imagem = MAXX.getVehicleImage(veiculo);
-    const nome = `${veiculo.marca || ''} ${veiculo.modelo || ''} ${veiculo.versao || ''}`.trim();
-    const ano = veiculo.ano || '—';
-    const km = Number(veiculo.km || 0).toLocaleString('pt-BR');
-    const preco = MAXX.formatMoney(veiculo.preco || 0);
+let fotosModal = [];
+let fotoAtual = 0;
 
-    const galeria = Array.isArray(veiculo.galeria) && veiculo.galeria.length
-      ? veiculo.galeria
-      : [imagem];
+function atualizarFotoModal() {
+  const imgModal = document.getElementById('vehicleModalImage');
+  const imgLightbox = document.getElementById('vehicleLightboxImage');
 
-    const mensagem = `Olá! Tenho interesse nesse veículo: ${nome} ${ano}. Ainda está disponível?`;
+  if (!fotosModal.length) return;
 
-    const modalExistente = document.getElementById('quickVehicleModal');
-    if (modalExistente) modalExistente.remove();
+  imgModal.src = fotosModal[fotoAtual];
 
-    document.body.insertAdjacentHTML('beforeend', `
-      <div class="quick-modal" id="quickVehicleModal">
-        <div class="quick-modal-box">
-          <button class="quick-modal-close" type="button" id="closeQuickModal">×</button>
+  if (imgLightbox) {
+    imgLightbox.src = fotosModal[fotoAtual];
+  }
 
-          <div class="quick-modal-photo">
-            <img id="quickMainImage" src="${MAXX.esc(imagem)}" alt="${MAXX.esc(nome)}">
-          </div>
+  document.getElementById('vehicleGalleryCounter').textContent =
+    `${fotoAtual + 1} / ${fotosModal.length}`;
 
-          <div class="quick-modal-info">
-            <div class="quick-modal-head">
-              <span>${MAXX.esc(veiculo.marca || '')}</span>
-              <h2>${MAXX.esc(nome)}</h2>
-            </div>
+  document.getElementById('vehicleLightboxCounter').textContent =
+    `${fotoAtual + 1} / ${fotosModal.length}`;
 
-            <div class="quick-modal-specs">
-              <div><small>Ano</small><strong>${ano}</strong></div>
-              <div><small>KM</small><strong>${km}</strong></div>
-              <div><small>Câmbio</small><strong>${MAXX.esc(veiculo.cambio || '—')}</strong></div>
-              <div><small>Combustível</small><strong>${MAXX.esc(veiculo.combustivel || '—')}</strong></div>
-              <div><small>Cor</small><strong>${MAXX.esc(veiculo.cor || '—')}</strong></div>
-            </div>
+  document.querySelectorAll('.vehicle-gallery-thumbs button')
+    .forEach((btn, index) => {
+      btn.classList.toggle('active', index === fotoAtual);
+    });
+}
 
-            <div class="quick-modal-price">
-              <small>Valor</small>
-              <strong>${preco}</strong>
-            </div>
+function fecharModalRapido() {
+  document.getElementById('vehicleModal')
+    ?.classList.remove('open');
 
-            ${veiculo.descricao ? `
-              <div class="quick-modal-section">
-                <h3>Descrição</h3>
-                <p>${MAXX.esc(veiculo.descricao)}</p>
-              </div>
-            ` : ''}
+  document.getElementById('vehicleLightbox')
+    ?.classList.remove('open');
 
-            ${veiculo.opcionais ? `
-              <div class="quick-modal-section">
-                <h3>Opcionais</h3>
-                <p>${MAXX.esc(veiculo.opcionais)}</p>
-              </div>
-            ` : ''}
+  document.body.style.overflow = '';
+}
 
-            <div class="quick-gallery">
-              ${galeria.map(img => {
-                const imgUrl = MAXX.getVehicleImage({ foto_capa: img });
-                return `
-                  <button class="quick-thumb" type="button" data-img="${MAXX.esc(imgUrl)}">
-                    <img src="${MAXX.esc(imgUrl)}" alt="${MAXX.esc(nome)}">
-                  </button>
-                `;
-              }).join('')}
-            </div>
+function abrirModalVeiculo(veiculo) {
 
-            <a class="btn btn-primary quick-modal-cta" href="${MAXX.waLink(mensagem)}" target="_blank" rel="noopener">
-              Tenho interesse
-            </a>
-          </div>
-        </div>
-      </div>
-    `);
+  const capa = MAXX.getVehicleImage(veiculo);
 
-    document.getElementById('closeQuickModal').addEventListener('click', fecharModalRapido);
+  fotosModal = [];
 
-    document.querySelectorAll('.quick-thumb').forEach((thumb) => {
-      thumb.addEventListener('click', () => {
-        document.getElementById('quickMainImage').src = thumb.dataset.img;
+  fotosModal.push(capa);
+
+  if (Array.isArray(veiculo.galeria)) {
+    veiculo.galeria.forEach((foto) => {
+      const url = MAXX.getVehicleImage({
+        foto_capa: foto
+      });
+
+      if (!fotosModal.includes(url)) {
+        fotosModal.push(url);
+      }
+    });
+  }
+
+  fotoAtual = 0;
+
+  const nome =
+    `${veiculo.marca || ''} ${veiculo.modelo || ''}`
+      .trim();
+
+  const titulo =
+    `${nome} ${veiculo.versao || ''}`
+      .trim();
+
+  const mensagem =
+    `Olá! Tenho interesse nesse veículo: ${titulo} ${veiculo.ano}. Ainda está disponível?`;
+
+  document.getElementById('vehicleModalBrand').textContent =
+    veiculo.marca || '';
+
+  document.getElementById('vehicleModalTitle').textContent =
+    nome;
+
+  document.getElementById('vehicleModalVersion').textContent =
+    veiculo.versao || '';
+
+  document.getElementById('vehicleModalPrice').textContent =
+    MAXX.formatMoney(veiculo.preco || 0);
+
+  document.getElementById('vehicleModalAno').textContent =
+    veiculo.ano || '—';
+
+  document.getElementById('vehicleModalKm').textContent =
+    Number(veiculo.km || 0).toLocaleString('pt-BR');
+
+  document.getElementById('vehicleModalCambio').textContent =
+    veiculo.cambio || '—';
+
+  document.getElementById('vehicleModalCombustivel').textContent =
+    veiculo.combustivel || '—';
+
+  document.getElementById('vehicleModalCor').textContent =
+    veiculo.cor || '—';
+
+  document.getElementById('vehicleModalDescricao').textContent =
+    veiculo.descricao || 'Sem descrição cadastrada.';
+
+  document.getElementById('vehicleModalOpcionais').textContent =
+    veiculo.opcionais || 'Consulte os opcionais disponíveis.';
+
+  document.getElementById('vehicleModalWhatsApp').href =
+    MAXX.waLink(mensagem);
+
+  const thumbs =
+    document.getElementById('vehicleGalleryThumbs');
+
+  thumbs.innerHTML = fotosModal.map((foto, index) => `
+    <button
+      type="button"
+      class="${index === 0 ? 'active' : ''}"
+      data-index="${index}"
+    >
+      <img src="${foto}" alt="">
+    </button>
+  `).join('');
+
+  thumbs.querySelectorAll('button')
+    .forEach((btn) => {
+      btn.addEventListener('click', () => {
+        fotoAtual = Number(btn.dataset.index);
+        atualizarFotoModal();
       });
     });
 
-    document.getElementById('quickVehicleModal').addEventListener('click', (e) => {
-      if (e.target.id === 'quickVehicleModal') fecharModalRapido();
-    });
-  }
+  atualizarFotoModal();
 
-  function fecharModalRapido() {
-    const modal = document.getElementById('quickVehicleModal');
-    if (modal) modal.remove();
-  }
+  document.getElementById('vehicleModal')
+    .classList.add('open');
+
+  document.body.style.overflow = 'hidden';
+}
 
   function atualizarFiltrosERenderizar() {
     resetarPagina();
@@ -641,6 +681,80 @@ document.addEventListener('DOMContentLoaded', () => {
         renderizar();
       }, 180);
     });
+    document.getElementById('vehicleModalClose')
+  ?.addEventListener('click', fecharModalRapido);
+
+document.querySelector('[data-close-modal]')
+  ?.addEventListener('click', fecharModalRapido);
+
+document.getElementById('vehicleGalleryPrev')
+  ?.addEventListener('click', () => {
+
+    fotoAtual--;
+
+    if (fotoAtual < 0) {
+      fotoAtual = fotosModal.length - 1;
+    }
+
+    atualizarFotoModal();
+  });
+
+document.getElementById('vehicleGalleryNext')
+  ?.addEventListener('click', () => {
+
+    fotoAtual++;
+
+    if (fotoAtual >= fotosModal.length) {
+      fotoAtual = 0;
+    }
+
+    atualizarFotoModal();
+  });
+
+document.getElementById('vehicleGalleryOpen')
+  ?.addEventListener('click', () => {
+
+    document.getElementById('vehicleLightbox')
+      .classList.add('open');
+
+    atualizarFotoModal();
+  });
+
+document.getElementById('vehicleLightboxClose')
+  ?.addEventListener('click', () => {
+    document.getElementById('vehicleLightbox')
+      .classList.remove('open');
+  });
+
+document.querySelector('[data-close-lightbox]')
+  ?.addEventListener('click', () => {
+    document.getElementById('vehicleLightbox')
+      .classList.remove('open');
+  });
+
+document.getElementById('vehicleLightboxPrev')
+  ?.addEventListener('click', () => {
+
+    fotoAtual--;
+
+    if (fotoAtual < 0) {
+      fotoAtual = fotosModal.length - 1;
+    }
+
+    atualizarFotoModal();
+  });
+
+document.getElementById('vehicleLightboxNext')
+  ?.addEventListener('click', () => {
+
+    fotoAtual++;
+
+    if (fotoAtual >= fotosModal.length) {
+      fotoAtual = 0;
+    }
+
+    atualizarFotoModal();
+  });
   }
 
   init();

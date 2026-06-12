@@ -84,14 +84,53 @@
     </section>
 
     <section class="admin-panel" id="estoque">
-      <div class="admin-panel-head">
-        <div>
-          <h2>Veículos cadastrados</h2>
-          <p>Cadastre, edite, destaque ou marque veículos como vendidos.</p>
-        </div>
+<div class="admin-panel-head">
+  <div>
+    <h2>Veículos cadastrados</h2>
+    <p>Cadastre, edite, destaque ou marque veículos como vendidos.</p>
+  </div>
+</div>
 
-        <input type="search" id="buscaAdmin" placeholder="Buscar veículo...">
-      </div>
+<div class="admin-filters">
+  <input type="search" id="buscaAdmin" placeholder="Buscar veículo...">
+
+  <select id="filtroStatusAdmin">
+    <option value="">Status: Todos</option>
+    <option value="disponivel">Disponíveis</option>
+    <option value="vendido">Vendidos</option>
+    <option value="ativo">Ativos no site</option>
+    <option value="inativo">Inativos</option>
+  </select>
+
+  <select id="filtroDestaqueAdmin">
+    <option value="">Destaque: Todos</option>
+    <option value="sim">Destaques</option>
+    <option value="nao">Não destaques</option>
+  </select>
+
+  <select id="filtroCondicaoAdmin">
+    <option value="">Condição: Todas</option>
+    <option value="novo">Novo / baixa KM</option>
+    <option value="seminovo">Seminovo</option>
+    <option value="usado">Usado</option>
+  </select>
+
+  <select id="filtroMarcaAdmin">
+    <option value="">Marca: Todas</option>
+  </select>
+
+  <select id="filtroAnoAdmin">
+    <option value="">Ano: Todos</option>
+  </select>
+
+  <select id="filtroOrdemAdmin">
+    <option value="recentes">Mais recentes</option>
+    <option value="preco-desc">Maior preço</option>
+    <option value="preco-asc">Menor preço</option>
+    <option value="ano-desc">Mais novo</option>
+    <option value="km-asc">Menor KM</option>
+  </select>
+</div>
 
       <div class="admin-table-wrap">
         <table class="admin-table">
@@ -250,6 +289,29 @@
       </form>
     </div>
   </div>
+
+  <div class="admin-modal" id="logoutModal">
+  <div class="admin-modal-card admin-confirm-card">
+    <div class="admin-modal-head">
+      <div>
+        <h2>Sair do painel?</h2>
+        <p>Você será desconectado da área administrativa.</p>
+      </div>
+
+      <button type="button" id="fecharLogoutModalBtn">×</button>
+    </div>
+
+    <div class="admin-modal-actions">
+      <button type="button" class="admin-btn admin-btn-ghost" id="cancelarLogoutBtn">
+        Cancelar
+      </button>
+
+      <button type="button" class="admin-btn admin-btn-primary" id="confirmarLogoutBtn">
+        Sim, sair
+      </button>
+    </div>
+  </div>
+</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../static/js/supabase.js"></script>

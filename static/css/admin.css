@@ -225,7 +225,7 @@
 
 .admin-stats {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 
   margin-bottom: 24px;
@@ -782,6 +782,22 @@
 .admin-extra-input {
   display: none;
   margin-top: 8px;
+}
+
+.admin-confirm-card {
+  width: min(430px, 100%);
+  overflow: visible;
+}
+
+.admin-confirm-card .admin-modal-head {
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.admin-confirm-card .admin-modal-head p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 /* ==================== RESPONSIVO ==================== */

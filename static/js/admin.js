@@ -508,7 +508,34 @@ async function excluirVeiculo(id) {
 
 /* ==================== EVENTOS ==================== */
 
-logoutBtn?.addEventListener('click', async () => {
+const logoutModal = document.getElementById('logoutModal');
+const fecharLogoutModalBtn = document.getElementById('fecharLogoutModalBtn');
+const cancelarLogoutBtn = document.getElementById('cancelarLogoutBtn');
+const confirmarLogoutBtn = document.getElementById('confirmarLogoutBtn');
+
+function abrirLogoutModal() {
+  logoutModal?.classList.add('open');
+}
+
+function fecharLogoutModal() {
+  logoutModal?.classList.remove('open');
+}
+
+logoutBtn?.addEventListener('click', abrirLogoutModal);
+
+fecharLogoutModalBtn?.addEventListener('click', fecharLogoutModal);
+cancelarLogoutBtn?.addEventListener('click', fecharLogoutModal);
+
+logoutModal?.addEventListener('click', (event) => {
+  if (event.target === logoutModal) {
+    fecharLogoutModal();
+  }
+});
+
+confirmarLogoutBtn?.addEventListener('click', async () => {
+  confirmarLogoutBtn.disabled = true;
+  confirmarLogoutBtn.textContent = 'Saindo...';
+
   await supabaseClient.auth.signOut();
   window.location.href = 'login.html';
 });

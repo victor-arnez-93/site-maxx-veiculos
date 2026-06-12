@@ -30,6 +30,10 @@
     </div>
 
     <div class="nav-right">
+      <a href="admin/login.html" class="btn btn-secondary btn-sm nav-admin-btn">
+        Área Restrita
+      </a>
+
       <a href="#busca" class="btn btn-primary btn-sm">
         Encontrar Veículo
       </a>
@@ -46,7 +50,8 @@
     <a href="index.html" class="nav-link active">Início</a>
     <a href="catalogo.html" class="nav-link">Catálogo</a>
     <a href="financiamento.html" class="nav-link">Financiamento</a>
-    <a href="#contato">Contato</a>
+    <a href="#contato" class="nav-link">Contato</a>
+    <a href="admin/login.html" class="btn btn-secondary">Área Restrita</a>
     <a href="#busca" class="btn btn-primary">Encontrar Veículo</a>
   </div>
 
@@ -73,12 +78,8 @@
           Ver Catálogo
         </a>
 
-        <a href="contato.html" class="btn btn-secondary btn-lg">
+        <a href="#contato" class="btn btn-secondary btn-lg">
           Falar com Especialista
-        </a>
-
-        <a href="admin/login.html" class="btn btn-secondary btn-lg">
-          Área Restrita
         </a>
       </div>
     </div>
@@ -94,6 +95,11 @@
         </div>
 
         <div class="search-fields">
+          <div class="field search-free-field">
+            <label class="field-label" for="sBusca">Busca livre</label>
+            <input class="input" id="sBusca" type="search" placeholder="Digite marca, modelo, versão ou cor...">
+          </div>
+
           <div class="field">
             <label class="field-label" for="sMarca">Marca</label>
             <select class="select" id="sMarca">
@@ -119,11 +125,6 @@
             <label class="field-label" for="sCombustivel">Combustível</label>
             <select class="select" id="sCombustivel">
               <option value="">Qualquer</option>
-              <option>Flex</option>
-              <option>Gasolina</option>
-              <option>Diesel</option>
-              <option>Híbrido</option>
-              <option>Elétrico</option>
             </select>
           </div>
 
@@ -147,225 +148,222 @@
     </div>
   </section>
 
-<section class="section">
-  <div class="container">
-    <div class="section-head split reveal">
-      <div>
-        <span class="eyebrow">Seleção da semana</span>
-        <h2 class="h-section">Destaques do estoque</h2>
-        <p class="sub">
-          Os melhores veículos disponíveis agora, prontos para test drive.
-        </p>
-      </div>
-
-      <a href="catalogo.html" class="btn btn-secondary">
-        Ver estoque completo →
-      </a>
-    </div>
-
-    <div class="v-grid" id="featuredGrid"></div>
-  </div>
-</section>
-
-<section class="section-tight">
-  <div class="container">
-    <div class="trust-grid">
-
-      <div class="trust-item reveal">
-        <div class="trust-icon">✓</div>
+  <section class="section featured-section">
+    <div class="container">
+      <div class="section-head split reveal">
         <div>
-          <h4>Procedência garantida</h4>
-          <p>Histórico verificado e laudo de vistoria em todos os veículos.</p>
+          <span class="eyebrow">Seleção da semana</span>
+          <h2 class="h-section">Destaques do estoque</h2>
+          <p class="sub">
+            Os melhores veículos disponíveis agora, prontos para test drive.
+          </p>
         </div>
-      </div>
 
-      <div class="trust-item reveal">
-        <div class="trust-icon">▭</div>
-        <div>
-          <h4>Financiamento facilitado</h4>
-          <p>Simulação online e aprovação rápida com as melhores taxas.</p>
-        </div>
-      </div>
-
-      <div class="trust-item reveal">
-        <div class="trust-icon">◷</div>
-        <div>
-          <h4>Processo ágil</h4>
-          <p>Documentação digital e entrega rápida, sem burocracia.</p>
-        </div>
-      </div>
-
-      <div class="trust-item reveal">
-        <div class="trust-icon">☏</div>
-        <div>
-          <h4>Atendimento humano</h4>
-          <p>Resposta em minutos pelo WhatsApp, do interesse ao pós-venda.</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section class="cta-band">
-  <div class="container reveal">
-    <span class="eyebrow center">Pronto para acelerar?</span>
-    <h2 class="h-section">Seu próximo carro está aqui</h2>
-    <p class="sub">
-      Fale com a nossa equipe e receba as melhores ofertas em primeira mão.
-    </p>
-
-    <div class="cta-actions">
-      <a href="catalogo.html" class="btn btn-primary btn-lg">
-        Ver Estoque
-      </a>
-
-      <a
-        href="https://www.instagram.com/maxxveiculostatui/"
-        target="_blank"
-        rel="noopener"
-        class="btn btn-instagram btn-lg"
-      >
-        <svg
-          class="instagram-icon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <rect x="2" y="2" width="20" height="20" rx="5"></rect>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-        </svg>
-
-        Ofertas no Instagram
-      </a>
-    </div>
-  </div>
-</section>
-
-  <section class="home-contact" id="contato">
-  <div class="container">
-    <div class="section-head center reveal">
-      <span class="eyebrow center">Estamos por aqui</span>
-      <h2 class="h-section">Fale com a <em>Maxx</em></h2>
-      <p class="sub">
-        Atendimento rápido pelo WhatsApp, telefone ou visita ao showroom.
-      </p>
-    </div>
-
-    <div class="home-contact-layout">
-      <aside class="contact-aside">
-      <div class="quick-contact-card">
-  <h5 class="footer-title">Mensagens rápidas</h5>
-
-  <a href="#" class="quick-wa-btn" data-wa="Olá! Quero ver o estoque disponível da Maxx Veículos.">
-    Ver estoque disponível
-  </a>
-
-  <a href="#" class="quick-wa-btn" data-wa="Olá! Quero simular um financiamento na Maxx Veículos.">
-    Simular financiamento
-  </a>
-
-  <a href="#" class="quick-wa-btn" data-wa="Olá! Quero avaliar meu carro na troca.">
-    Avaliar meu carro na troca
-  </a>
-
-  <a href="#" class="quick-wa-btn" data-wa="Olá! Quero agendar uma visita na Maxx Veículos.">
-    Agendar visita
-  </a>
-</div>
-      </aside>
-
-      <section class="contact-form-card">
-        <div id="formWrap">
-          <h3>Envie sua mensagem</h3>
-          <p>Preencha os campos e envie direto pelo WhatsApp.</p>
-
-          <form id="contactForm" class="form-stack">
-            <div class="form-grid-2">
-              <div class="field">
-                <label class="field-label" for="cNome">Nome *</label>
-                <input class="input" id="cNome" placeholder="Seu nome completo" required>
-              </div>
-
-              <div class="field">
-                <label class="field-label" for="cFone">WhatsApp / Celular *</label>
-                <input class="input" id="cFone" placeholder="(15) 9 9999-9999" inputmode="tel" maxlength="16" required>
-              </div>
-            </div>
-
-            <div class="form-grid-2">
-              <div class="field">
-                <label class="field-label" for="cEmail">E-mail</label>
-                <input class="input" id="cEmail" type="email" placeholder="voce@email.com">
-              </div>
-
-              <div class="field">
-                <label class="field-label" for="cAssunto">Assunto *</label>
-                <select class="select" id="cAssunto" required>
-                  <option value="">Selecionar...</option>
-                  <option>Quero comprar um veículo</option>
-                  <option>Financiamento</option>
-                  <option>Avaliação de troca</option>
-                  <option>Visita ao showroom</option>
-                  <option>Outra dúvida</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="field-label" for="cVeiculo">Veículo de interesse</label>
-              <input class="input" id="cVeiculo" placeholder="Ex.: Corolla 2023, SUV, automático...">
-            </div>
-
-            <div class="field">
-              <label class="field-label" for="cMsg">Mensagem *</label>
-              <textarea class="input" id="cMsg" placeholder="Conte o que você procura..." required></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-wa-form btn-lg btn-block">
-              Enviar pelo WhatsApp
-            </button>
-          </form>
-        </div>
-      </section>
-    </div>
-  </div>
-</section>
-
-<section class="home-map">
-  <div class="container">
-    <div class="map-card reveal">
-      <div>
-        <span class="eyebrow">Localização</span>
-        <h2 class="h-section">Venha conhecer a Maxx Veículos</h2>
-        <p class="sub">
-          Acesse a rota pelo Google Maps e venha tomar um café enquanto conhece o estoque.
-        </p>
-
-        <a href="https://maps.app.goo.gl/xdpvFL4iBuLKegzL7" class="btn btn-secondary" target="_blank" rel="noopener">
-          Abrir rota no Google Maps
+        <a href="catalogo.html" class="btn btn-secondary">
+          Ver estoque completo →
         </a>
       </div>
 
-      <iframe
-        src="https://www.google.com/maps?q=Maxx%20Veiculos%20Tatui&output=embed"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
+      <div class="featured-carousel">
+        <button class="featured-arrow featured-prev" id="featuredPrev" type="button" aria-label="Anterior">
+          ‹
+        </button>
+
+        <div class="v-grid featured-track" id="featuredGrid"></div>
+
+        <button class="featured-arrow featured-next" id="featuredNext" type="button" aria-label="Próximo">
+          ›
+        </button>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <div class="trust-grid">
+
+        <div class="trust-item reveal">
+          <div class="trust-icon">✓</div>
+          <div>
+            <h4>Procedência garantida</h4>
+            <p>Histórico verificado e laudo de vistoria em todos os veículos.</p>
+          </div>
+        </div>
+
+        <div class="trust-item reveal">
+          <div class="trust-icon">▭</div>
+          <div>
+            <h4>Financiamento facilitado</h4>
+            <p>Simulação online e aprovação rápida com as melhores taxas.</p>
+          </div>
+        </div>
+
+        <div class="trust-item reveal">
+          <div class="trust-icon">◷</div>
+          <div>
+            <h4>Processo ágil</h4>
+            <p>Documentação digital e entrega rápida, sem burocracia.</p>
+          </div>
+        </div>
+
+        <div class="trust-item reveal">
+          <div class="trust-icon">☏</div>
+          <div>
+            <h4>Atendimento humano</h4>
+            <p>Resposta em minutos pelo WhatsApp, do interesse ao pós-venda.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container reveal">
+      <span class="eyebrow center">Pronto para acelerar?</span>
+      <h2 class="h-section">Seu próximo carro está aqui</h2>
+      <p class="sub">
+        Fale com a nossa equipe e receba as melhores ofertas em primeira mão.
+      </p>
+
+      <div class="cta-actions">
+        <a href="catalogo.html" class="btn btn-primary btn-lg">
+          Ver Estoque
+        </a>
+
+        <a href="https://www.instagram.com/maxxveiculostatui/" target="_blank" rel="noopener" class="btn btn-instagram btn-lg">
+          <svg class="instagram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          Ofertas no Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-contact" id="contato">
+    <div class="container">
+      <div class="section-head center reveal">
+        <span class="eyebrow center">Estamos por aqui</span>
+        <h2 class="h-section">Fale com a <em>Maxx</em></h2>
+        <p class="sub">
+          Atendimento rápido pelo WhatsApp, telefone ou visita ao showroom.
+        </p>
+      </div>
+
+      <div class="home-contact-layout">
+        <aside class="contact-aside">
+          <div class="quick-contact-card">
+            <h5 class="footer-title">Mensagens rápidas</h5>
+
+            <a href="#" class="quick-wa-btn" data-wa="Olá! Quero ver o estoque disponível da Maxx Veículos.">
+              Ver estoque disponível
+            </a>
+
+            <a href="#" class="quick-wa-btn" data-wa="Olá! Quero simular um financiamento na Maxx Veículos.">
+              Simular financiamento
+            </a>
+
+            <a href="#" class="quick-wa-btn" data-wa="Olá! Quero avaliar meu carro na troca.">
+              Avaliar meu carro na troca
+            </a>
+
+            <a href="#" class="quick-wa-btn" data-wa="Olá! Quero agendar uma visita na Maxx Veículos.">
+              Agendar visita
+            </a>
+          </div>
+        </aside>
+
+        <section class="contact-form-card">
+          <div id="formWrap">
+            <h3>Envie sua mensagem</h3>
+            <p>Preencha os campos e envie direto pelo WhatsApp.</p>
+
+            <form id="contactForm" class="form-stack">
+              <div class="form-grid-2">
+                <div class="field">
+                  <label class="field-label" for="cNome">Nome *</label>
+                  <input class="input" id="cNome" placeholder="Seu nome completo" required>
+                </div>
+
+                <div class="field">
+                  <label class="field-label" for="cFone">WhatsApp / Celular *</label>
+                  <input class="input" id="cFone" placeholder="(15) 9 9999-9999" inputmode="tel" maxlength="16" required>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="field">
+                  <label class="field-label" for="cEmail">E-mail</label>
+                  <input class="input" id="cEmail" type="email" placeholder="voce@email.com">
+                </div>
+
+                <div class="field">
+                  <label class="field-label" for="cAssunto">Assunto *</label>
+                  <select class="select" id="cAssunto" required>
+                    <option value="">Selecionar...</option>
+                    <option>Quero comprar um veículo</option>
+                    <option>Financiamento</option>
+                    <option>Avaliação de troca</option>
+                    <option>Visita ao showroom</option>
+                    <option>Outra dúvida</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="cVeiculo">Veículo de interesse</label>
+                <input class="input" id="cVeiculo" placeholder="Ex.: Corolla 2023, SUV, automático...">
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="cMsg">Mensagem *</label>
+                <textarea class="input" id="cMsg" placeholder="Conte o que você procura..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-wa-form btn-lg btn-block">
+                Enviar pelo WhatsApp
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-map">
+    <div class="container">
+      <div class="map-card reveal">
+        <div class="map-content">
+          <span class="eyebrow">Localização</span>
+          <h2 class="h-section">Venha conhecer a Maxx Veículos</h2>
+          <p class="sub">
+            Acesse a rota pelo Google Maps e venha tomar um café enquanto conhece o estoque.
+          </p>
+
+          <a href="https://maps.app.goo.gl/xdpvFL4iBuLKegzL7" class="btn btn-secondary" target="_blank" rel="noopener">
+            Abrir rota no Google Maps
+          </a>
+        </div>
+
+        <div class="map-frame">
+          <iframe
+            src="https://www.google.com/maps?q=Maxx%20Veiculos%20Tatui&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
 
-        <div class="footer-logo">
+        <div class="footer-logo footer-logo-glass">
           <img src="static/img/logo1.png" alt="Maxx Veículos">
           <p class="footer-about">
             Veículos selecionados com qualidade, procedência e garantia. Atendimento premium do primeiro contato à entrega.
@@ -403,16 +401,33 @@
 
       <div class="footer-bottom">
         <p>© 2026 Maxx Veículos. Todos os direitos reservados.</p>
-        <p>Desenvolvido por <a href="https://crvsolucoesti.com/" target="_blank" rel="noopener">CRV Soluções em TI</a></p>
+
+        <a href="https://crvsolucoesti.com/" target="_blank" rel="noopener" class="crv-dev-link">
+          <span>Desenvolvido por</span>
+          <img src="static/img/logo2.png" alt="CRV Soluções em TI">
+          <strong>CRV Soluções em TI</strong>
+        </a>
       </div>
     </div>
   </footer>
 
+  <div class="search-alert" id="searchAlert" aria-hidden="true">
+    <div class="search-alert-box">
+      <button type="button" class="search-alert-close" id="searchAlertClose">×</button>
+      <h3>Nenhum veículo encontrado</h3>
+      <p>Não encontramos veículos com esses filtros. Você pode limpar a busca ou conferir o catálogo completo.</p>
+      <a href="catalogo.html" class="btn btn-primary">Ver catálogo completo</a>
+    </div>
+  </div>
+
   <a href="#" class="wa-float" data-wa="Olá! Vim pelo site da Maxx Veículos." aria-label="Falar no WhatsApp">
     <svg class="wa-icon" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.570-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
     </svg>
   </a>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="static/js/supabase.js"></script>
 
   <script src="static/js/main.js"></script>
   <script src="static/js/inicio.js"></script>

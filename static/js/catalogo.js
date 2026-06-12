@@ -1,6 +1,6 @@
 /* ============================================================
    MAXX VEÍCULOS — CATALOGO.JS
-   Supabase · Filtros · Busca · Ordenação · Renderização
+   Supabase · Filtros · Busca · Ordenação · Paginação · Modal
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,11 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   let veiculos = [];
+  let paginaAtual = 1;
+
+  const ITENS_POR_PAGINA_DESKTOP = 6;
+  const ITENS_POR_PAGINA_MOBILE = 4;
 
   async function init() {
     if (!grid) return;
 
-    grid.innerHTML = MAXX.skeletons(4);
+    grid.innerHTML = MAXX.skeletons(6);
 
     veiculos = await carregarVeiculos();
 
@@ -214,7 +218,9 @@ document.addEventListener('DOMContentLoaded', () => {
         veiculo.versao,
         veiculo.cor,
         veiculo.combustivel,
-        veiculo.cambio
+        veiculo.cambio,
+        veiculo.descricao,
+        veiculo.opcionais
       ].join(' ').toLowerCase();
 
       const ano = Number(veiculo.ano || 0);
@@ -273,8 +279,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function getItensPorPagina() {
+    return window.innerWidth <= 768
+      ? ITENS_POR_PAGINA_MOBILE
+      : ITENS_POR_PAGINA_DESKTOP;
+  }
+
+  function getTotalPaginas(totalItens) {
+    return Math.max(1, Math.ceil(totalItens / getItensPorPagina()));
+  }
+
+  function resetarPagina() {
+    paginaAtual = 1;
+  }
+
   function renderizar() {
     const lista = filtrarVeiculos();
+    const totalPaginas = getTotalPaginas(lista.length);
+
+    if (paginaAtual > totalPaginas) {
+      paginaAtual = totalPaginas;
+    }
 
     countNum.textContent = lista.length;
     countLabel.textContent = lista.length === 1
@@ -294,13 +319,88 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
 
+      removerPaginacao();
+
       document.getElementById('emptyClear').addEventListener('click', limparFiltros);
       return;
     }
 
-    grid.innerHTML = lista.map((veiculo) => MAXX.cardHTML(veiculo)).join('');
+    const porPagina = getItensPorPagina();
+    const inicio = (paginaAtual - 1) * porPagina;
+    const fim = inicio + porPagina;
+    const pagina = lista.slice(inicio, fim);
+
+    grid.innerHTML = pagina.map((veiculo) => MAXX.cardHTML(veiculo)).join('');
+
+    renderizarPaginacao(lista.length);
 
     MAXX.initReveal(grid);
+  }
+
+  function renderizarPaginacao(totalItens) {
+    removerPaginacao();
+
+    const totalPaginas = getTotalPaginas(totalItens);
+
+    if (totalPaginas <= 1) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'catalog-pagination';
+    wrapper.id = 'catalogPagination';
+
+    const paginas = Array.from({ length: totalPaginas }).map((_, index) => {
+      const numero = index + 1;
+      const ativo = numero === paginaAtual ? 'active' : '';
+
+      return `
+        <button class="catalog-page-btn ${ativo}" type="button" data-page="${numero}">
+          ${numero}
+        </button>
+      `;
+    }).join('');
+
+    wrapper.innerHTML = `
+      <button class="catalog-page-nav" type="button" data-page="prev" ${paginaAtual === 1 ? 'disabled' : ''}>
+        Anterior
+      </button>
+
+      <div class="catalog-page-numbers">
+        ${paginas}
+      </div>
+
+      <button class="catalog-page-nav" type="button" data-page="next" ${paginaAtual === totalPaginas ? 'disabled' : ''}>
+        Próxima
+      </button>
+    `;
+
+    grid.insertAdjacentElement('afterend', wrapper);
+
+    wrapper.addEventListener('click', (e) => {
+      const botao = e.target.closest('[data-page]');
+      if (!botao || botao.disabled) return;
+
+      const action = botao.dataset.page;
+
+      if (action === 'prev') {
+        paginaAtual = Math.max(1, paginaAtual - 1);
+      } else if (action === 'next') {
+        paginaAtual = Math.min(totalPaginas, paginaAtual + 1);
+      } else {
+        paginaAtual = Number(action);
+      }
+
+      renderizar();
+
+      document.querySelector('.stock-content')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    });
+  }
+
+  function removerPaginacao() {
+    const paginacao = document.getElementById('catalogPagination');
+    if (paginacao) paginacao.remove();
   }
 
   function renderizarChips() {
@@ -348,6 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
           popularModelos();
         }
 
+        resetarPagina();
         renderizar();
       });
     });
@@ -364,6 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
     filters.ordem.value = 'recentes';
 
     popularModelos();
+    resetarPagina();
     renderizar();
   }
 
@@ -462,55 +564,83 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modal) modal.remove();
   }
 
-function adicionarEventos() {
-  let debounceBusca;
+  function atualizarFiltrosERenderizar() {
+    resetarPagina();
+    renderizar();
+  }
 
-  grid.addEventListener('click', (e) => {
-    const botao = e.target.closest('.btn-quick-view');
+  function adicionarEventos() {
+    let debounceBusca;
+    let resizeTimer;
 
-    if (!botao) return;
+    grid.addEventListener('click', (e) => {
+      const botao = e.target.closest('.btn-quick-view');
 
-    e.preventDefault();
-    e.stopPropagation();
+      if (!botao) return;
 
-    const id = botao.dataset.id;
-    const veiculo = veiculos.find(v => String(v.id) === String(id));
+      e.preventDefault();
+      e.stopPropagation();
 
-    if (!veiculo) return;
+      const id = botao.dataset.id;
+      const veiculo = veiculos.find(v => String(v.id) === String(id));
 
-    abrirModalVeiculo(veiculo);
-  });
+      if (!veiculo) return;
+
+      abrirModalVeiculo(veiculo);
+    });
 
     filters.busca.addEventListener('input', () => {
       clearTimeout(debounceBusca);
-      debounceBusca = setTimeout(renderizar, 180);
+      debounceBusca = setTimeout(atualizarFiltrosERenderizar, 180);
     });
 
     filters.marca.addEventListener('change', () => {
       popularModelos();
-      renderizar();
+      atualizarFiltrosERenderizar();
     });
 
-    filters.modelo.addEventListener('change', renderizar);
-    filters.ano.addEventListener('change', renderizar);
-    filters.preco.addEventListener('change', renderizar);
-    filters.cambio.addEventListener('change', renderizar);
-    filters.combustivel.addEventListener('change', renderizar);
-    filters.ordem.addEventListener('change', renderizar);
+    filters.modelo.addEventListener('change', atualizarFiltrosERenderizar);
+    filters.ano.addEventListener('change', atualizarFiltrosERenderizar);
+    filters.preco.addEventListener('change', atualizarFiltrosERenderizar);
+    filters.cambio.addEventListener('change', atualizarFiltrosERenderizar);
+    filters.combustivel.addEventListener('change', atualizarFiltrosERenderizar);
+
+    filters.ordem.addEventListener('change', () => {
+      resetarPagina();
+      renderizar();
+    });
 
     clearFilters.addEventListener('click', limparFiltros);
 
     if (openFilters && filtersCard) {
       openFilters.addEventListener('click', () => {
         filtersCard.classList.add('open');
+        document.body.classList.add('filters-open');
       });
     }
 
     if (closeFilters && filtersCard) {
       closeFilters.addEventListener('click', () => {
         filtersCard.classList.remove('open');
+        document.body.classList.remove('filters-open');
       });
     }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+
+      filtersCard?.classList.remove('open');
+      document.body.classList.remove('filters-open');
+      fecharModalRapido();
+    });
+
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+
+      resizeTimer = setTimeout(() => {
+        renderizar();
+      }, 180);
+    });
   }
 
   init();

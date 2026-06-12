@@ -794,11 +794,39 @@
 }
 
 .vehicle-modal-info {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 26px;
 
   margin-bottom: 30px;
+}
+
+.vehicle-modal-info::before {
+  content: '';
+
+  position: absolute;
+
+  top: -8px;
+  bottom: -8px;
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 1px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent,
+      rgba(255, 59, 47, 0.10),
+      rgba(255, 59, 47, 0.30),
+      rgba(255, 59, 47, 0.10),
+      transparent
+    );
+
+  box-shadow:
+    0 0 4px rgba(255, 59, 47, 0.12);
 }
 
 .vehicle-modal-info h3 {

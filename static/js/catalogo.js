@@ -1,6 +1,6 @@
 /* ============================================================
    MAXX VEÍCULOS — CATALOGO.JS
-   Filtros · Busca · Ordenação · Renderização do catálogo
+   Supabase · Filtros · Busca · Ordenação · Renderização
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,10 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let veiculos = [];
 
-  function init() {
+  async function init() {
+    if (!grid) return;
+
     grid.innerHTML = MAXX.skeletons(4);
 
-    veiculos = MAXX.getVehicles();
+    veiculos = await carregarVeiculos();
 
     popularFiltros();
     aplicarParametrosUrl();
@@ -40,20 +42,99 @@ document.addEventListener('DOMContentLoaded', () => {
     adicionarEventos();
   }
 
+  async function carregarVeiculos() {
+    const supabase = getSupabaseClient();
+
+    if (!supabase) {
+      console.warn('Supabase não encontrado. Usando MAXX.getVehicles() como fallback.');
+      return normalizarLista(MAXX.getVehicles ? MAXX.getVehicles() : []);
+    }
+
+    const { data, error } = await supabase
+      .from('veiculos')
+      .select('*')
+      .eq('ativo', true)
+      .eq('vendido', false)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Erro ao carregar veículos do Supabase:', error);
+      grid.innerHTML = `
+        <div class="empty-state">
+          <h3>Erro ao carregar veículos</h3>
+          <p>Verifique a conexão com o Supabase e as policies da tabela.</p>
+        </div>
+      `;
+      return [];
+    }
+
+    return normalizarLista(data || []);
+  }
+
+  function getSupabaseClient() {
+    if (window.MAXX_SUPABASE) return window.MAXX_SUPABASE;
+    if (window.supabaseClient) return window.supabaseClient;
+    if (window.supabase && window.supabase.from) return window.supabase;
+    return null;
+  }
+
+  function normalizarLista(lista) {
+    return lista.map((v) => ({
+      id: v.id,
+
+      marca: v.marca || '',
+      modelo: v.modelo || '',
+      versao: v.versao || '',
+
+      ano: Number(v.ano || 0),
+      km: Number(v.km || 0),
+
+      cambio: v.cambio || '',
+      combustivel: v.combustivel || '',
+      cor: v.cor || '',
+
+      preco: Number(v.preco || 0),
+
+      descricao: v.descricao || '',
+      opcionais: v.opcionais || '',
+
+      ativo: v.ativo !== false,
+      destaque: v.destaque === true,
+      vendido: v.vendido === true,
+
+      foto_capa: v.foto_capa || '',
+      galeria: Array.isArray(v.galeria) ? v.galeria : [],
+
+      created_at: v.created_at || null,
+      updated_at: v.updated_at || null
+    }));
+  }
+
   function popularFiltros() {
     const marcas = [...new Set(veiculos.map(v => v.marca).filter(Boolean))].sort();
-    const anos = [...new Set(veiculos.map(v => Number(v.ano || v.anoFab || v.ano_fab)).filter(Boolean))].sort((a, b) => b - a);
+
+    const anos = [...new Set(
+      veiculos
+        .map(v => Number(v.ano || 0))
+        .filter(Boolean)
+    )].sort((a, b) => b - a);
 
     filters.marca.innerHTML = '<option value="">Todas</option>';
     filters.modelo.innerHTML = '<option value="">Todos</option>';
     filters.ano.innerHTML = '<option value="">Qualquer</option>';
 
     marcas.forEach((marca) => {
-      filters.marca.insertAdjacentHTML('beforeend', `<option value="${MAXX.esc(marca)}">${MAXX.esc(marca)}</option>`);
+      filters.marca.insertAdjacentHTML(
+        'beforeend',
+        `<option value="${MAXX.esc(marca)}">${MAXX.esc(marca)}</option>`
+      );
     });
 
     anos.forEach((ano) => {
-      filters.ano.insertAdjacentHTML('beforeend', `<option value="${ano}">${ano} ou mais novo</option>`);
+      filters.ano.insertAdjacentHTML(
+        'beforeend',
+        `<option value="${ano}">${ano} ou mais novo</option>`
+      );
     });
 
     popularModelos();
@@ -74,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     modelos.forEach((modelo) => {
       const selected = modelo === modeloAtual ? 'selected' : '';
+
       filters.modelo.insertAdjacentHTML(
         'beforeend',
         `<option value="${MAXX.esc(modelo)}" ${selected}>${MAXX.esc(modelo)}</option>`
@@ -135,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         veiculo.cambio
       ].join(' ').toLowerCase();
 
-      const ano = Number(veiculo.ano || veiculo.anoFab || veiculo.ano_fab || 0);
+      const ano = Number(veiculo.ano || 0);
       const valor = Number(veiculo.preco || 0);
 
       if (busca && !texto.includes(busca)) return false;
@@ -165,11 +247,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const kmA = Number(a.km || 0);
       const kmB = Number(b.km || 0);
 
-      const anoA = Number(a.ano || a.anoFab || a.ano_fab || 0);
-      const anoB = Number(b.ano || b.anoFab || b.ano_fab || 0);
+      const anoA = Number(a.ano || 0);
+      const anoB = Number(b.ano || 0);
 
-      const dataA = new Date(a.createdAt || a.created_at || 0);
-      const dataB = new Date(b.createdAt || b.created_at || 0);
+      const dataA = new Date(a.created_at || 0);
+      const dataB = new Date(b.created_at || 0);
 
       switch (ordem) {
         case 'preco-asc':
@@ -195,7 +277,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const lista = filtrarVeiculos();
 
     countNum.textContent = lista.length;
-    countLabel.textContent = lista.length === 1 ? 'veículo encontrado' : 'veículos encontrados';
+    countLabel.textContent = lista.length === 1
+      ? 'veículo encontrado'
+      : 'veículos encontrados';
 
     renderizarChips();
 
@@ -283,8 +367,119 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizar();
   }
 
-  function adicionarEventos() {
-    let debounceBusca;
+  function abrirModalVeiculo(veiculo) {
+    const imagem = MAXX.getVehicleImage(veiculo);
+    const nome = `${veiculo.marca || ''} ${veiculo.modelo || ''} ${veiculo.versao || ''}`.trim();
+    const ano = veiculo.ano || '—';
+    const km = Number(veiculo.km || 0).toLocaleString('pt-BR');
+    const preco = MAXX.formatMoney(veiculo.preco || 0);
+
+    const galeria = Array.isArray(veiculo.galeria) && veiculo.galeria.length
+      ? veiculo.galeria
+      : [imagem];
+
+    const mensagem = `Olá! Tenho interesse nesse veículo: ${nome} ${ano}. Ainda está disponível?`;
+
+    const modalExistente = document.getElementById('quickVehicleModal');
+    if (modalExistente) modalExistente.remove();
+
+    document.body.insertAdjacentHTML('beforeend', `
+      <div class="quick-modal" id="quickVehicleModal">
+        <div class="quick-modal-box">
+          <button class="quick-modal-close" type="button" id="closeQuickModal">×</button>
+
+          <div class="quick-modal-photo">
+            <img id="quickMainImage" src="${MAXX.esc(imagem)}" alt="${MAXX.esc(nome)}">
+          </div>
+
+          <div class="quick-modal-info">
+            <div class="quick-modal-head">
+              <span>${MAXX.esc(veiculo.marca || '')}</span>
+              <h2>${MAXX.esc(nome)}</h2>
+            </div>
+
+            <div class="quick-modal-specs">
+              <div><small>Ano</small><strong>${ano}</strong></div>
+              <div><small>KM</small><strong>${km}</strong></div>
+              <div><small>Câmbio</small><strong>${MAXX.esc(veiculo.cambio || '—')}</strong></div>
+              <div><small>Combustível</small><strong>${MAXX.esc(veiculo.combustivel || '—')}</strong></div>
+              <div><small>Cor</small><strong>${MAXX.esc(veiculo.cor || '—')}</strong></div>
+            </div>
+
+            <div class="quick-modal-price">
+              <small>Valor</small>
+              <strong>${preco}</strong>
+            </div>
+
+            ${veiculo.descricao ? `
+              <div class="quick-modal-section">
+                <h3>Descrição</h3>
+                <p>${MAXX.esc(veiculo.descricao)}</p>
+              </div>
+            ` : ''}
+
+            ${veiculo.opcionais ? `
+              <div class="quick-modal-section">
+                <h3>Opcionais</h3>
+                <p>${MAXX.esc(veiculo.opcionais)}</p>
+              </div>
+            ` : ''}
+
+            <div class="quick-gallery">
+              ${galeria.map(img => {
+                const imgUrl = MAXX.getVehicleImage({ foto_capa: img });
+                return `
+                  <button class="quick-thumb" type="button" data-img="${MAXX.esc(imgUrl)}">
+                    <img src="${MAXX.esc(imgUrl)}" alt="${MAXX.esc(nome)}">
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            <a class="btn btn-primary quick-modal-cta" href="${MAXX.waLink(mensagem)}" target="_blank" rel="noopener">
+              Tenho interesse
+            </a>
+          </div>
+        </div>
+      </div>
+    `);
+
+    document.getElementById('closeQuickModal').addEventListener('click', fecharModalRapido);
+
+    document.querySelectorAll('.quick-thumb').forEach((thumb) => {
+      thumb.addEventListener('click', () => {
+        document.getElementById('quickMainImage').src = thumb.dataset.img;
+      });
+    });
+
+    document.getElementById('quickVehicleModal').addEventListener('click', (e) => {
+      if (e.target.id === 'quickVehicleModal') fecharModalRapido();
+    });
+  }
+
+  function fecharModalRapido() {
+    const modal = document.getElementById('quickVehicleModal');
+    if (modal) modal.remove();
+  }
+
+function adicionarEventos() {
+  let debounceBusca;
+
+  grid.addEventListener('click', (e) => {
+    const botao = e.target.closest('.btn-quick-view');
+
+    if (!botao) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const id = botao.dataset.id;
+    const veiculo = veiculos.find(v => String(v.id) === String(id));
+
+    if (!veiculo) return;
+
+    abrirModalVeiculo(veiculo);
+  });
 
     filters.busca.addEventListener('input', () => {
       clearTimeout(debounceBusca);

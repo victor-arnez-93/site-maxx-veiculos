@@ -33,9 +33,7 @@ const MAXX = {
   getVehicles() {
     const dados = localStorage.getItem(this.STORAGE_KEY);
 
-    if (!dados) {
-      return [];
-    }
+    if (!dados) return [];
 
     try {
       const lista = JSON.parse(dados);
@@ -52,17 +50,40 @@ const MAXX = {
 
   getAvailableVehicles() {
     return this.getVehicles().filter((veiculo) => {
-      return String(veiculo.status || 'disponivel') === 'disponivel';
+      return veiculo.ativo !== false && veiculo.vendido !== true;
     });
   },
 
   getVehicleImage(veiculo) {
+    const SUPABASE_URL = 'https://anwcdznwsgwtprvqofps.supabase.co';
+    const BUCKET = 'veiculos';
+
+    function resolverImagem(valor) {
+      if (!valor) return '';
+
+      const img = String(valor).trim();
+
+      if (img.startsWith('http')) return img;
+      if (img.startsWith('static/')) return img;
+      if (img.startsWith('data:')) return img;
+
+      return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${img}`;
+    }
+
+    if (veiculo?.foto_capa) {
+      return resolverImagem(veiculo.foto_capa);
+    }
+
+    if (Array.isArray(veiculo?.galeria) && veiculo.galeria.length > 0) {
+      return resolverImagem(veiculo.galeria[0]);
+    }
+
     if (veiculo?.imagem) {
-      return veiculo.imagem;
+      return resolverImagem(veiculo.imagem);
     }
 
     if (Array.isArray(veiculo?.fotos) && veiculo.fotos.length > 0) {
-      return veiculo.fotos[0];
+      return resolverImagem(veiculo.fotos[0]);
     }
 
     return 'static/img/sem-foto.jpg';
@@ -89,33 +110,56 @@ const MAXX = {
 
   cardHTML(veiculo) {
     const id = this.esc(veiculo.id);
-    const marca = this.esc(veiculo.marca || 'Marca');
-    const modelo = this.esc(veiculo.modelo || 'Modelo');
-    const ano = this.esc(veiculo.ano || veiculo.anoFab || veiculo.ano_fab || '—');
+
+    const marcaRaw = veiculo.marca || 'Marca';
+    const modeloRaw = veiculo.modelo || 'Modelo';
+    const versaoRaw = veiculo.versao || '';
+
+    const marca = this.esc(marcaRaw);
+    const modelo = this.esc(modeloRaw);
+    const versao = this.esc(versaoRaw);
+
+    const ano = this.esc(veiculo.ano || '—');
     const km = Number(veiculo.km || 0).toLocaleString('pt-BR');
     const cambio = this.esc(veiculo.cambio || '—');
     const combustivel = this.esc(veiculo.combustivel || '—');
     const preco = this.formatMoney(veiculo.preco || 0);
     const imagem = this.esc(this.getVehicleImage(veiculo));
 
-    const mensagem = `Olá! Tenho interesse no veículo ${marca} ${modelo}.`;
+    const vendido = veiculo.vendido === true;
+    const statusClasse = vendido ? 'chip-sold' : 'chip-available';
+    const statusTexto = vendido ? 'Vendido' : 'Disponível';
+
+    const nomeCompleto = `${marcaRaw} ${modeloRaw} ${versaoRaw} ${ano}`.trim();
+
+    const mensagem = `Olá! Tenho interesse nesse veículo: ${nomeCompleto}. Ainda está disponível?`;
 
     return `
       <article class="v-card">
-        <a href="veiculo.html?id=${id}" class="v-card-media">
-          <img src="${imagem}" alt="${marca} ${modelo}" loading="lazy">
-
-          <div class="v-card-chips">
-            <span class="chip chip-primary">Disponível</span>
-          </div>
+        <button class="v-card-media btn-quick-view" type="button" data-id="${id}">
+          <img
+            src="${imagem}"
+            alt="${marca} ${modelo}"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='static/img/sem-foto.jpg';"
+          >
 
           <span class="v-card-photos">Fotos</span>
-        </a>
+        </button>
 
         <div class="v-card-body">
+          <div class="v-card-head">
           <div class="v-card-brand">${marca}</div>
 
-          <h3 class="v-card-name">${modelo}</h3>
+          <span class="v-card-badge ${statusClasse}">
+            ${statusTexto}
+          </span>
+        </div>
+
+          <h3 class="v-card-name">
+            ${modelo}
+            ${versao ? `<small>${versao}</small>` : ''}
+          </h3>
 
           <ul class="v-card-specs">
             <li>Ano <b>${ano}</b></li>
@@ -132,8 +176,30 @@ const MAXX = {
             </div>
 
             <div class="v-card-actions">
-              <a class="icon-btn" href="veiculo.html?id=${id}" aria-label="Ver detalhes">→</a>
-              <a class="icon-btn wa" href="${this.waLink(mensagem)}" target="_blank" rel="noopener" aria-label="WhatsApp">☎</a>
+                <button
+                  class="icon-btn btn-details btn-quick-view"
+                  type="button"
+                  data-id="${id}"
+                  aria-label="Ver detalhes"
+                  title="Ver detalhes"
+                >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 5c5.05 0 9.27 4.12 10.65 6.43a1.1 1.1 0 0 1 0 1.14C21.27 14.88 17.05 19 12 19S2.73 14.88 1.35 12.57a1.1 1.1 0 0 1 0-1.14C2.73 9.12 6.95 5 12 5Zm0 2C7.95 7 4.54 10.08 3.4 12c1.14 1.92 4.55 5 8.6 5s7.46-3.08 8.6-5C19.46 10.08 16.05 7 12 7Zm0 2.25A2.75 2.75 0 1 1 12 14.75 2.75 2.75 0 0 1 12 9.25Zm0 2A.75.75 0 1 0 12 12.75.75.75 0 0 0 12 11.25Z"/>
+                </svg>
+              </button>
+
+              <a
+                class="icon-btn wa"
+                href="${this.waLink(mensagem)}"
+                target="_blank"
+                rel="noopener"
+                aria-label="Chamar no WhatsApp"
+                title="Chamar no WhatsApp"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.570-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
+              </a>
             </div>
           </div>
         </div>

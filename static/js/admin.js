@@ -1,13 +1,25 @@
 /* ============================================================
    MAXX VEÍCULOS — ADMIN.JS
-   CRUD temporário com localStorage
-   Depois trocar por Supabase
+   Supabase Auth · CRUD veículos · Storage fotos
    ============================================================ */
 
-const STORAGE_KEY = 'maxx_veiculos';
+const supabaseClient = window.MAXX_SUPABASE;
+const BUCKET_VEICULOS = 'veiculos';
 
-if (localStorage.getItem('maxx_admin_logado') !== 'true') {
-  window.location.href = 'login.html';
+async function protegerAdmin() {
+  if (!supabaseClient) {
+    window.location.href = 'login.html';
+    return false;
+  }
+
+  const { data } = await supabaseClient.auth.getSession();
+
+  if (!data.session) {
+    window.location.href = 'login.html';
+    return false;
+  }
+
+  return true;
 }
 
 const logoutBtn = document.getElementById('logoutBtn');
@@ -59,7 +71,7 @@ const modelosPorMarca = {
   Audi: ['A3', 'A4', 'A5', 'Q3', 'Q5', 'Q7', 'Outros']
 };
 
-let veiculos = carregarVeiculos();
+let veiculos = [];
 
 /* ==================== MARCA / MODELO ==================== */
 
@@ -98,19 +110,15 @@ function preencherModelos(marca) {
 }
 
 function obterMarcaAtual() {
-  if (marcaSelect.value === 'outros') {
-    return marcaOutro.value.trim();
-  }
-
-  return marcaSelect.value;
+  return marcaSelect.value === 'outros'
+    ? marcaOutro.value.trim()
+    : marcaSelect.value;
 }
 
 function obterModeloAtual() {
-  if (modeloSelect.value === 'Outros') {
-    return modeloOutro.value.trim();
-  }
-
-  return modeloSelect.value;
+  return modeloSelect.value === 'Outros'
+    ? modeloOutro.value.trim()
+    : modeloSelect.value;
 }
 
 marcaSelect?.addEventListener('change', () => {
@@ -159,15 +167,12 @@ function somenteNumeros(valor) {
 
 function formatarNumeroBR(valor) {
   const numeros = somenteNumeros(valor);
-
   if (!numeros) return '';
-
   return Number(numeros).toLocaleString('pt-BR');
 }
 
 function formatarPrecoInput(valor) {
   const numeros = somenteNumeros(valor);
-
   if (!numeros) return '';
 
   const centavos = Number(numeros) / 100;
@@ -184,9 +189,7 @@ function converterNumeroBR(valor) {
 
 function converterPrecoBR(valor) {
   const numeros = somenteNumeros(valor);
-
   if (!numeros) return 0;
-
   return Number(numeros) / 100;
 }
 
@@ -202,16 +205,6 @@ precoInput?.addEventListener('input', () => {
   precoInput.value = formatarPrecoInput(precoInput.value);
 });
 
-/* ==================== STORAGE ==================== */
-
-function carregarVeiculos() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-}
-
-function salvarVeiculos() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(veiculos));
-}
-
 /* ==================== FORMATADORES ==================== */
 
 function formatarMoeda(valor) {
@@ -223,6 +216,72 @@ function formatarMoeda(valor) {
 
 function formatarKm(valor) {
   return Number(valor || 0).toLocaleString('pt-BR') + ' km';
+}
+
+function obterUrlPublicaFoto(path) {
+  if (!path) return '../static/img/placeholder-carro.jpg';
+
+  const { data } = supabaseClient.storage
+    .from(BUCKET_VEICULOS)
+    .getPublicUrl(path);
+
+  return data.publicUrl;
+}
+
+/* ==================== SUPABASE ==================== */
+
+async function carregarVeiculos() {
+  const { data, error } = await supabaseClient
+    .from('veiculos')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    alert('Erro ao carregar veículos.');
+    return;
+  }
+
+  veiculos = data || [];
+  renderizarVeiculos();
+}
+
+async function uploadFotos(files, veiculoId) {
+  const arquivos = Array.from(files || []);
+  const paths = [];
+
+  for (const file of arquivos) {
+    const ext = file.name.split('.').pop();
+    const nomeArquivo = `${veiculoId}/${crypto.randomUUID()}.${ext}`;
+
+    const { error } = await supabaseClient.storage
+      .from(BUCKET_VEICULOS)
+      .upload(nomeArquivo, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (error) {
+      console.error(error);
+      throw new Error('Erro ao enviar foto.');
+    }
+
+    paths.push(nomeArquivo);
+  }
+
+  return paths;
+}
+
+async function removerFotos(paths = []) {
+  if (!paths.length) return;
+
+  const { error } = await supabaseClient.storage
+    .from(BUCKET_VEICULOS)
+    .remove(paths);
+
+  if (error) {
+    console.warn('Não foi possível remover fotos antigas:', error);
+  }
 }
 
 /* ==================== MODAL ==================== */
@@ -293,16 +352,8 @@ function fecharModal() {
 
 /* ==================== FORM ==================== */
 
-function obterDadosFormulario(fotosBase64 = []) {
-  const idAtual = document.getElementById('veiculoId').value;
-  const existente = veiculos.find((item) => item.id === idAtual);
-
-  const galeriaFinal = fotosBase64.length
-    ? fotosBase64
-    : existente?.galeria || [];
-
+function obterDadosFormulario(galeriaFinal = []) {
   return {
-    id: idAtual || crypto.randomUUID(),
     marca: obterMarcaAtual(),
     modelo: obterModeloAtual(),
     versao: document.getElementById('versao').value.trim(),
@@ -317,29 +368,10 @@ function obterDadosFormulario(fotosBase64 = []) {
     ativo: document.getElementById('ativo').checked,
     destaque: document.getElementById('destaque').checked,
     vendido: document.getElementById('vendido').checked,
-    foto_capa: galeriaFinal[0] || '',
+    foto_capa: galeriaFinal[0] || null,
     galeria: galeriaFinal,
-    atualizado_em: new Date().toISOString()
+    updated_at: new Date().toISOString()
   };
-}
-
-function converterFotosParaBase64(files) {
-  const arquivos = Array.from(files || []);
-
-  if (!arquivos.length) {
-    return Promise.resolve([]);
-  }
-
-  return Promise.all(
-    arquivos.map((file) => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-
-      reader.readAsDataURL(file);
-    }))
-  );
 }
 
 /* ==================== RENDER ==================== */
@@ -361,7 +393,7 @@ function renderizarVeiculos() {
     tr.innerHTML = `
       <td>
         <div class="admin-car">
-          <img class="admin-car-img" src="${veiculo.foto_capa || '../static/img/placeholder-carro.jpg'}" alt="">
+          <img class="admin-car-img" src="${obterUrlPublicaFoto(veiculo.foto_capa)}" alt="">
           <div>
             <strong>${veiculo.marca} ${veiculo.modelo}</strong>
             <span>${veiculo.versao || 'Sem versão'}</span>
@@ -431,35 +463,53 @@ function editarVeiculo(id) {
   }
 }
 
-function alternarVendido(id) {
-  veiculos = veiculos.map((veiculo) => {
-    if (veiculo.id !== id) return veiculo;
+async function alternarVendido(id) {
+  const veiculo = veiculos.find((item) => item.id === id);
+  if (!veiculo) return;
 
-    return {
-      ...veiculo,
-      vendido: !veiculo.vendido
-    };
-  });
+  const { error } = await supabaseClient
+    .from('veiculos')
+    .update({
+      vendido: !veiculo.vendido,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', id);
 
-  salvarVeiculos();
-  renderizarVeiculos();
+  if (error) {
+    console.error(error);
+    alert('Erro ao atualizar status.');
+    return;
+  }
+
+  await carregarVeiculos();
 }
 
-function excluirVeiculo(id) {
-  const confirmar = confirm('Excluir este veículo?');
+async function excluirVeiculo(id) {
+  const veiculo = veiculos.find((item) => item.id === id);
+  if (!veiculo) return;
 
+  const confirmar = confirm('Excluir este veículo?');
   if (!confirmar) return;
 
-  veiculos = veiculos.filter((veiculo) => veiculo.id !== id);
+  const { error } = await supabaseClient
+    .from('veiculos')
+    .delete()
+    .eq('id', id);
 
-  salvarVeiculos();
-  renderizarVeiculos();
+  if (error) {
+    console.error(error);
+    alert('Erro ao excluir veículo.');
+    return;
+  }
+
+  await removerFotos(veiculo.galeria || []);
+  await carregarVeiculos();
 }
 
 /* ==================== EVENTOS ==================== */
 
-logoutBtn?.addEventListener('click', () => {
-  localStorage.removeItem('maxx_admin_logado');
+logoutBtn?.addEventListener('click', async () => {
+  await supabaseClient.auth.signOut();
   window.location.href = 'login.html';
 });
 
@@ -472,21 +522,58 @@ buscaAdmin?.addEventListener('input', renderizarVeiculos);
 veiculoForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const fotosInput = document.getElementById('fotos');
-  const fotosBase64 = await converterFotosParaBase64(fotosInput.files);
+  const submitBtn = veiculoForm.querySelector('button[type="submit"]');
+  const idAtual = document.getElementById('veiculoId').value;
+  const existente = veiculos.find((item) => item.id === idAtual);
 
-  const dados = obterDadosFormulario(fotosBase64);
-  const index = veiculos.findIndex((item) => item.id === dados.id);
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Salvando...';
 
-  if (index >= 0) {
-    veiculos[index] = dados;
-  } else {
-    veiculos.unshift(dados);
+  try {
+    let galeriaFinal = existente?.galeria || [];
+
+    const fotosInput = document.getElementById('fotos');
+    const novasFotos = Array.from(fotosInput.files || []);
+
+    if (novasFotos.length) {
+      if (existente?.galeria?.length) {
+        await removerFotos(existente.galeria);
+      }
+
+      const veiculoIdParaPasta = idAtual || crypto.randomUUID();
+      galeriaFinal = await uploadFotos(novasFotos, veiculoIdParaPasta);
+    }
+
+    const dados = obterDadosFormulario(galeriaFinal);
+
+    if (idAtual) {
+      const { error } = await supabaseClient
+        .from('veiculos')
+        .update(dados)
+        .eq('id', idAtual);
+
+      if (error) throw error;
+    } else {
+      const { error } = await supabaseClient
+        .from('veiculos')
+        .insert(dados);
+
+      if (error) throw error;
+    }
+
+    await carregarVeiculos();
+    fecharModal();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || 'Erro ao salvar veículo.');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Salvar veículo';
   }
-
-  salvarVeiculos();
-  renderizarVeiculos();
-  fecharModal();
 });
 
-renderizarVeiculos();
+protegerAdmin().then((ok) => {
+  if (ok) {
+    carregarVeiculos();
+  }
+});

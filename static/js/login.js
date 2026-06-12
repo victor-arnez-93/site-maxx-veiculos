@@ -1,6 +1,6 @@
 /* ============================================================
    MAXX VEÍCULOS — LOGIN.JS
-   Visual do login · Validação temporária · Partículas
+   Login real Supabase Auth · Partículas
    ============================================================ */
 
 const loginForm = document.getElementById('loginForm');
@@ -11,6 +11,8 @@ const loginBtn = document.getElementById('loginBtn');
 const loginAlert = document.getElementById('loginAlert');
 const loginAlertText = document.getElementById('loginAlertText');
 
+const supabaseClient = window.MAXX_SUPABASE;
+
 function showLoginError(message) {
   loginAlertText.textContent = message;
   loginAlert.classList.remove('show');
@@ -20,6 +22,16 @@ function showLoginError(message) {
 
 function hideLoginError() {
   loginAlert.classList.remove('show');
+}
+
+async function verificarSessaoAtual() {
+  if (!supabaseClient) return;
+
+  const { data } = await supabaseClient.auth.getSession();
+
+  if (data.session) {
+    window.location.href = 'admin.html';
+  }
 }
 
 passwordToggle?.addEventListener('click', () => {
@@ -33,8 +45,13 @@ passwordToggle?.addEventListener('click', () => {
 loginForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
 
+  if (!supabaseClient) {
+    showLoginError('Supabase não carregou. Verifique os scripts no login.html.');
+    return;
+  }
+
   const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
+  const password = passwordInput.value;
 
   hideLoginError();
 
@@ -46,19 +63,15 @@ loginForm?.addEventListener('submit', async (event) => {
   loginBtn.disabled = true;
   loginBtn.classList.add('loading');
 
-  await new Promise((resolve) => setTimeout(resolve, 700));
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
 
-  /*
-    Temporário até conectar no Supabase:
-    Depois vamos trocar este bloco pelo login real.
-  */
-  const loginTemporarioValido =
-    email === 'admin@maxxveiculos.com.br' &&
-    password === 'admin123';
-
-  if (!loginTemporarioValido) {
+  if (error) {
     loginBtn.disabled = false;
     loginBtn.classList.remove('loading');
+
     passwordInput.value = '';
     passwordInput.focus();
 
@@ -66,15 +79,15 @@ loginForm?.addEventListener('submit', async (event) => {
     return;
   }
 
-  localStorage.setItem('maxx_admin_logado', 'true');
-
   loginBtn.classList.remove('loading');
   loginBtn.textContent = 'Acesso liberado';
 
   setTimeout(() => {
     window.location.href = 'admin.html';
-  }, 550);
+  }, 450);
 });
+
+verificarSessaoAtual();
 
 /* ==================== PARTÍCULAS ==================== */
 

@@ -278,6 +278,7 @@ const MAXX = {
 
     let timer = null;
     let paused = false;
+    let cloned = false;
 
     const isDesktop = () => window.matchMedia('(min-width: 769px)').matches;
 
@@ -288,10 +289,28 @@ const MAXX = {
       }
     };
 
+    const prepareInfiniteLoop = () => {
+      if (cloned) return;
+
+      const cards = Array.from(carousel.querySelectorAll('.v-card'));
+
+      if (cards.length <= 3) return;
+
+      cards.forEach((card) => {
+        const clone = card.cloneNode(true);
+        clone.setAttribute('data-carousel-clone', 'true');
+        carousel.appendChild(clone);
+      });
+
+      cloned = true;
+    };
+
     const start = () => {
       stop();
 
       if (!isDesktop()) return;
+
+      prepareInfiniteLoop();
 
       timer = setInterval(() => {
         if (paused) return;
@@ -302,24 +321,22 @@ const MAXX = {
 
         const gap = 24;
         const step = card.offsetWidth + gap;
-        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        const originalWidth = carousel.scrollWidth / 2;
 
-        if (maxScroll <= 0) return;
-
-        if (carousel.scrollLeft >= maxScroll - 20) {
-          carousel.scrollTo({
-            left: 0,
-            behavior: 'smooth'
-          });
-
-          return;
-        }
+        if (originalWidth <= carousel.clientWidth) return;
 
         carousel.scrollBy({
           left: step,
           behavior: 'smooth'
         });
-      }, 6500);
+
+        if (carousel.scrollLeft >= originalWidth) {
+          carousel.scrollTo({
+            left: carousel.scrollLeft - originalWidth,
+            behavior: 'auto'
+          });
+        }
+      }, 4500);
     };
 
     carousel.addEventListener('mouseenter', () => {

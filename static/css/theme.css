@@ -93,6 +93,11 @@
   transition: var(--trans);
 }
 
+.admin-global-search input::placeholder {
+  color: var(--muted-2);
+  opacity: 1;
+}
+
 .admin-global-search input:focus {
   border-color: var(--dynamic-primary);
   background: var(--primary-dim);
@@ -240,7 +245,7 @@
   flex-direction: column;
 
   overflow-y: auto;
-  overflow-x: visible;
+  overflow-x: hidden;
 
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--dynamic-primary) 55%, transparent) transparent;
@@ -250,6 +255,7 @@
 
 .admin-sidebar::-webkit-scrollbar {
   width: 7px;
+  height: 0;
 }
 
 .admin-sidebar::-webkit-scrollbar-track {
@@ -263,11 +269,19 @@
 
 .admin-menu {
   flex: 1;
+
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: .4px;
 }
 
 .admin-menu a,
 .admin-menu button {
   overflow: hidden;
+
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: .4px;
 }
 
 .admin-menu a::after,
@@ -283,18 +297,18 @@
   background: linear-gradient(
     90deg,
     transparent,
-    color-mix(in srgb, var(--dynamic-primary) 75%, transparent),
+    color-mix(in srgb, var(--dynamic-primary) 80%, transparent),
     transparent
   );
 
-  opacity: .22;
-  box-shadow: 0 0 10px color-mix(in srgb, var(--dynamic-primary) 50%, transparent);
+  opacity: .42;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--dynamic-primary) 58%, transparent);
 }
 
 .admin-menu a:hover::after,
 .admin-menu button:hover::after,
 .admin-menu a.active::after {
-  opacity: .82;
+  opacity: 1;
 }
 
 .admin-menu a:hover,
@@ -352,6 +366,7 @@
   margin-bottom: 12px;
 
   color: var(--muted);
+  font-family: var(--font-display);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 1.7px;
@@ -563,11 +578,11 @@ body.sidebar-collapsed .admin-sidebar-toggle span {
 
 body.admin-light {
   --text: #1f1f24;
-  --muted: #686873;
-  --muted-2: #8a8a96;
+  --muted: #64646f;
+  --muted-2: #777783;
   --white: #101014;
-  --line: rgba(0,0,0,.10);
-  --line-2: rgba(0,0,0,.16);
+  --line: rgba(0,0,0,.12);
+  --line-2: rgba(0,0,0,.18);
 
   background:
     radial-gradient(circle at 18% 16%, color-mix(in srgb, var(--dynamic-primary) 10%, transparent), transparent 30%),
@@ -581,16 +596,29 @@ body.admin-light .admin-quick,
 body.admin-light .admin-stats article,
 body.admin-light .admin-modal-card {
   background:
-    linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.68)),
-    rgba(255,255,255,.82);
+    linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.76)),
+    rgba(255,255,255,.9);
+
+  box-shadow:
+    0 10px 35px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+body.admin-light .admin-global-header {
+  border-bottom: 1px solid rgba(0,0,0,.12);
 }
 
 body.admin-light .admin-table {
-  background: rgba(255,255,255,.72);
+  background: rgba(255,255,255,.9);
 }
 
 body.admin-light .admin-table th {
-  background: rgba(0,0,0,.04);
+  background: rgba(0,0,0,.055);
+  border-bottom: 1px solid rgba(0,0,0,.10);
+}
+
+body.admin-light .admin-table td {
+  border-bottom-color: rgba(0,0,0,.065);
 }
 
 body.admin-light .admin-form input,
@@ -600,7 +628,30 @@ body.admin-light .admin-filters input,
 body.admin-light .admin-filters select,
 body.admin-light .admin-global-search input {
   color: #111;
-  background: rgba(0,0,0,.035);
+  background: rgba(255,255,255,.95);
+  border: 1px solid rgba(0,0,0,.14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+body.admin-light .admin-form input::placeholder,
+body.admin-light .admin-form textarea::placeholder,
+body.admin-light .admin-filters input::placeholder,
+body.admin-light .admin-global-search input::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
+body.admin-light .admin-form input:focus,
+body.admin-light .admin-form select:focus,
+body.admin-light .admin-form textarea:focus,
+body.admin-light .admin-filters input:focus,
+body.admin-light .admin-filters select:focus,
+body.admin-light .admin-global-search input:focus {
+  border-color: color-mix(in srgb, var(--dynamic-primary) 70%, #111);
+  background: #fff;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--dynamic-primary) 16%, transparent),
+    inset 0 1px 0 rgba(255,255,255,.9);
 }
 
 body.admin-light .admin-form option,
@@ -609,14 +660,112 @@ body.admin-light .admin-filters option {
   background: #fff;
 }
 
+body.admin-light .admin-global-weather,
+body.admin-light .admin-global-user {
+  background: rgba(255,255,255,.92);
+  border-color: rgba(0,0,0,.14);
+}
+
+body.admin-light .admin-global-weather:hover {
+  color: #111;
+  background: color-mix(in srgb, var(--dynamic-primary) 12%, #fff);
+}
+
+body.admin-light .admin-theme-toggle {
+  color: #111;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--dynamic-primary) 18%, #fff), #ffffff);
+
+  border-color: rgba(0,0,0,.14);
+}
+
+body.admin-light .admin-sidebar-toggle {
+  color: #111;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--dynamic-primary) 26%, #ffffff),
+      #ffffff
+    );
+
+  border: 1px solid rgba(0,0,0,.16);
+  box-shadow: 0 12px 28px rgba(0,0,0,.18);
+}
+
+body.admin-light .admin-sidebar-toggle span,
+body.admin-light .admin-sidebar-toggle i,
+body.admin-light .admin-sidebar-toggle svg {
+  color: #111;
+  fill: #111;
+  stroke: #111;
+}
+
+body.admin-light .admin-menu a::after,
+body.admin-light .admin-menu button::after {
+  opacity: .52;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--dynamic-primary) 72%, #111),
+    transparent
+  );
+  box-shadow: 0 0 10px color-mix(in srgb, var(--dynamic-primary) 38%, transparent);
+}
+
+body.admin-light .admin-menu a:hover::after,
+body.admin-light .admin-menu button:hover::after,
+body.admin-light .admin-menu a.active::after {
+  opacity: 1;
+}
+
+body.admin-light .admin-menu a:hover,
+body.admin-light .admin-menu button:hover,
+body.admin-light .admin-menu a.active {
+  background: color-mix(in srgb, var(--dynamic-primary) 13%, #fff);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--dynamic-primary) 34%, rgba(0,0,0,.12));
+}
+
+body.admin-light .admin-sidebar-footer a {
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--dynamic-primary) 10%, transparent), transparent 42%),
+    linear-gradient(135deg, rgba(255,255,255,.98), rgba(255,255,255,.72)),
+    rgba(255,255,255,.92);
+}
+
 body.admin-light .admin-weather-card {
   background:
-    linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.82)),
+    linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.86)),
     #fff;
+
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.18),
+    0 0 0 1px color-mix(in srgb, var(--dynamic-primary) 26%, transparent);
 }
 
 body.admin-light .admin-weather-day {
   background: rgba(0,0,0,.035);
+}
+
+body.admin-light .admin-weather-day span {
+  color: #111;
+}
+
+body.admin-light .admin-weather-head button {
+  color: #111;
+}
+
+/* ==================== STATUS / BADGES ==================== */
+
+.status-disponivel,
+.badge-disponivel,
+.admin-status-disponivel,
+[data-status="disponivel"],
+[data-status="Disponível"] {
+  background: rgba(34,197,94,.18) !important;
+  border: 1px solid rgba(34,197,94,.55) !important;
+  color: #16a34a !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 14px rgba(34,197,94,.16) !important;
 }
 
 /* ==================== MOBILE COMPLETO ==================== */
@@ -743,6 +892,12 @@ body.admin-light .admin-weather-day {
   body.sidebar-collapsed .admin-sidebar-footer img {
     max-width: 100%;
     width: 200px;
+  }
+
+  body.admin-light .admin-mobile-menu-btn {
+    color: #111;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--dynamic-primary) 20%, #fff), #fff);
   }
 }
 

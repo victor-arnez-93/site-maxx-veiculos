@@ -41,7 +41,7 @@
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --trans: all 0.28s var(--ease);
 
-  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-display: 'Rajdhani', 'Inter', sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
 }
 

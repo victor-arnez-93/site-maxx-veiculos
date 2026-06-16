@@ -1,0 +1,100 @@
+/* ============================================================
+   MAXX VEÍCULOS — PROPOSTAS.CSS
+   CRM · Negociação · Propostas
+   ============================================================ */
+
+.propostas-filters {
+  grid-template-columns: 1.7fr repeat(2, minmax(170px, 1fr));
+}
+
+.propostas-table-wrap {
+  max-height: 520px;
+}
+
+.propostas-table {
+  min-width: 980px;
+}
+
+.proposta-info {
+  display: grid;
+  gap: 4px;
+}
+
+.proposta-info strong {
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.proposta-info span {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.proposta-money {
+  color: var(--white);
+  font-weight: 800;
+}
+
+.proposta-status {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  min-width: 116px;
+  padding: 8px 12px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+
+.proposta-status.aberta {
+  background: rgba(59,130,246,.12);
+  border: 1px solid rgba(59,130,246,.35);
+}
+
+.proposta-status.em_analise {
+  background: rgba(245,158,11,.12);
+  border: 1px solid rgba(245,158,11,.35);
+}
+
+.proposta-status.aprovada {
+  background: rgba(34,197,94,.12);
+  border: 1px solid rgba(34,197,94,.35);
+}
+
+.proposta-status.recusada,
+.proposta-status.cancelada {
+  background: rgba(239,68,68,.12);
+  border: 1px solid rgba(239,68,68,.35);
+}
+
+.proposta-status.vendida {
+  background: rgba(255,59,47,.16);
+  border: 1px solid rgba(255,59,47,.42);
+}
+
+@media (max-width: 1280px) {
+  .propostas-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .propostas-filters input {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .propostas-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .propostas-table {
+    min-width: 920px;
+  }
+}

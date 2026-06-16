@@ -1,0 +1,117 @@
+/* ============================================================
+   MAXX VEÍCULOS — FINANCEIRO.CSS
+   Receitas · Despesas · Fluxo de Caixa
+   ============================================================ */
+
+.financeiro-filters {
+  grid-template-columns: 1.7fr repeat(3, minmax(170px, 1fr));
+}
+
+.financeiro-table-wrap {
+  max-height: 520px;
+}
+
+.financeiro-table {
+  min-width: 1080px;
+}
+
+.financeiro-info {
+  display: grid;
+  gap: 4px;
+}
+
+.financeiro-info strong {
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.financeiro-info span {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.financeiro-valor {
+  font-weight: 800;
+}
+
+.financeiro-valor.receita {
+  color: #3ddc84;
+}
+
+.financeiro-valor.despesa {
+  color: #ff5c5c;
+}
+
+.financeiro-tipo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 100px;
+  padding: 8px 12px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+
+.financeiro-tipo.receita {
+  background: rgba(34,197,94,.12);
+  border: 1px solid rgba(34,197,94,.35);
+}
+
+.financeiro-tipo.despesa {
+  background: rgba(239,68,68,.12);
+  border: 1px solid rgba(239,68,68,.35);
+}
+
+.financeiro-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 100px;
+  padding: 8px 12px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+
+.financeiro-status.pago {
+  background: rgba(34,197,94,.12);
+  border: 1px solid rgba(34,197,94,.35);
+}
+
+.financeiro-status.pendente {
+  background: rgba(245,158,11,.12);
+  border: 1px solid rgba(245,158,11,.35);
+}
+
+@media (max-width: 1280px) {
+  .financeiro-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .financeiro-filters input {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .financeiro-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .financeiro-table {
+    min-width: 980px;
+  }
+}

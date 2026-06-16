@@ -3,12 +3,15 @@
    Empresa ativa do usuário logado
    ============================================================ */
 
-const supabaseClient = window.MAXX_SUPABASE;
-
 let empresaAtual = null;
 
 async function carregarEmpresaAtual() {
-  const { data, error } = await supabaseClient
+  if (!window.MAXX_SUPABASE) {
+    console.error('Supabase não inicializado.');
+    return null;
+  }
+
+  const { data, error } = await window.MAXX_SUPABASE
     .from('usuarios_empresa')
     .select(`
       empresa_id,

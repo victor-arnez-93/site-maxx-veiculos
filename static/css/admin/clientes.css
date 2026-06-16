@@ -1,0 +1,106 @@
+/* ============================================================
+   MAXX VEÍCULOS — CLIENTES.CSS
+   CRM · Clientes · Área restrita
+   ============================================================ */
+
+.clientes-filters {
+  grid-template-columns: 1.5fr repeat(3, minmax(150px, 1fr));
+}
+
+.clientes-table-wrap {
+  max-height: 520px;
+}
+
+.clientes-table {
+  min-width: 860px;
+}
+
+.cliente-info {
+  display: grid;
+  gap: 3px;
+}
+
+.cliente-info strong {
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.cliente-info span {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.cliente-contato {
+  display: grid;
+  gap: 4px;
+}
+
+.cliente-contato a,
+.cliente-contato span {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.cliente-contato a:hover {
+  color: var(--primary);
+}
+
+.cliente-origem {
+  display: inline-flex;
+  align-items: center;
+
+  width: fit-content;
+  padding: 6px 11px;
+
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+
+  color: var(--white);
+  background: rgba(255,255,255,.055);
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+
+.cliente-observacao-preview {
+  max-width: 260px;
+
+  color: var(--muted);
+  font-size: 12.5px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clientes-table .admin-actions {
+  justify-content: flex-start;
+}
+
+@media (max-width: 1280px) {
+  .clientes-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .clientes-filters input {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .clientes-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .clientes-table {
+    min-width: 780px;
+  }
+
+  .cliente-observacao-preview {
+    max-width: 190px;
+  }
+}

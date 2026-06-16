@@ -83,6 +83,7 @@ const modelosPorMarca = {
 };
 
 let veiculos = [];
+let empresaIdAtual = null;
 
 /* ==================== TEXTO / NORMALIZAÇÃO ==================== */
 
@@ -284,6 +285,7 @@ async function carregarVeiculos() {
   const { data, error } = await supabaseClient
     .from('veiculos')
     .select('*')
+    .eq('empresa_id', empresaIdAtual)
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -408,6 +410,7 @@ function obterDadosFormulario(galeriaFinal = []) {
   normalizarVeiculoTexto();
 
   return {
+    empresa_id: empresaIdAtual,
     marca: obterMarcaAtual(),
     modelo: obterModeloAtual(),
     versao: capitalizarTexto(document.getElementById('versao').value),
@@ -753,8 +756,19 @@ veiculoForm?.addEventListener('submit', async (event) => {
   }
 });
 
-protegerAdmin().then((ok) => {
-  if (ok) {
-    carregarVeiculos();
+(async () => {
+  const ok = await protegerAdmin();
+
+  if (!ok) return;
+
+  const empresa = await carregarEmpresaAtual();
+
+  if (!empresa) {
+    alert('Nenhuma empresa vinculada ao usuário.');
+    return;
   }
-});
+
+  empresaIdAtual = empresa.id;
+
+  await carregarVeiculos();
+})();

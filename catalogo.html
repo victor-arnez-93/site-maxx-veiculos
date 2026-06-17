@@ -318,9 +318,23 @@
         </div>
 
         <div class="vehicle-modal-actions">
-          <a href="#" class="btn btn-primary btn-lg" id="vehicleModalWhatsApp" target="_blank" rel="noopener">
-            Tenho interesse
-          </a>
+<button
+  type="button"
+  class="btn btn-primary btn-lg"
+  id="vehicleModalInterest"
+>
+  Tenho interesse
+</button>
+
+<a
+  href="#"
+  class="btn btn-secondary btn-lg"
+  id="vehicleModalWhatsApp"
+  target="_blank"
+  rel="noopener"
+>
+  Falar no WhatsApp
+</a>
 
           <a href="financiamento.html" class="btn btn-secondary btn-lg">
             Simular financiamento
@@ -328,6 +342,59 @@
         </div>
       </section>
     </article>
+  </div>
+
+    <div class="vehicle-lead-modal" id="vehicleLeadModal" aria-hidden="true">
+    <div class="vehicle-lead-backdrop" data-close-lead-modal></div>
+
+    <form class="vehicle-lead-box" id="vehicleLeadForm">
+      <button class="vehicle-lead-close" id="vehicleLeadClose" type="button">×</button>
+
+      <span class="eyebrow">Tenho interesse</span>
+      <h2 id="vehicleLeadTitle">Fale com a Maxx Veículos</h2>
+      <p id="vehicleLeadSubtitle">Preencha seus dados para nossa equipe retornar o contato.</p>
+
+      <input type="hidden" id="leadPublicVeiculoId">
+
+      <label>
+        <span>Nome</span>
+        <input id="leadPublicNome" type="text" required placeholder="Seu nome">
+      </label>
+
+      <label>
+        <span>WhatsApp</span>
+        <input id="leadPublicTelefone" type="text" inputmode="tel" required placeholder="(15) 99999-9999">
+      </label>
+
+      <label>
+        <span>E-mail</span>
+        <input id="leadPublicEmail" type="email" placeholder="seuemail@email.com">
+      </label>
+
+      <label>
+        <span>Mensagem</span>
+        <textarea id="leadPublicMensagem" placeholder="Olá, tenho interesse neste veículo."></textarea>
+      </label>
+
+      <button class="btn btn-primary btn-lg btn-block" type="submit">
+        Enviar interesse
+      </button>
+    </form>
+  </div>
+
+    <div class="site-feedback-modal" id="siteFeedbackModal" aria-hidden="true">
+    <div class="site-feedback-backdrop"></div>
+
+    <div class="site-feedback-box">
+      <h2 id="siteFeedbackTitle">Interesse enviado</h2>
+      <p id="siteFeedbackText">
+        Recebemos seu interesse. Nossa equipe entrará em contato em breve.
+      </p>
+
+      <button class="btn btn-primary btn-lg" id="siteFeedbackOk" type="button">
+        Entendi
+      </button>
+    </div>
   </div>
 
   <div class="vehicle-lightbox" id="vehicleLightbox" aria-hidden="true">
@@ -363,7 +430,7 @@
   <!-- Supabase precisa vir antes do catalogo.js -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="static/js/supabase.js"></script>
-
+  <script src="static/js/core/empresa.js"></script>
   <script src="static/js/main.js"></script>
   <script src="static/js/catalogo.js"></script>
 </body>

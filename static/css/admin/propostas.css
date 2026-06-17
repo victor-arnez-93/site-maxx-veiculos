@@ -443,6 +443,57 @@ body.admin-light .propostas-table tbody tr:hover {
   background: color-mix(in srgb, var(--dynamic-primary) 8%, #fff);
 }
 
+/* ==================== SELECTS / OPTIONS PROPOSTAS ==================== */
+
+.admin-form select {
+  appearance: none;
+  -webkit-appearance: none;
+
+  cursor: pointer;
+
+  padding-right: 40px;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath fill='none' stroke='%23ff3b2f' stroke-width='1.6' stroke-linecap='round' d='M1 1l4.5 4.5L10 1'/%3E%3C/svg%3E");
+
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+}
+
+.admin-form select option,
+.propostas-filters select option {
+  color: #ffffff;
+  background: #181818;
+}
+
+.admin-form select option:checked,
+.propostas-filters select option:checked {
+  color: #ffffff;
+  background: #262626;
+}
+
+body.admin-light .admin-form select option,
+body.admin-light .propostas-filters select option {
+  color: #111111;
+  background: #ffffff;
+}
+
+body.admin-light .admin-form select option:checked,
+body.admin-light .propostas-filters select option:checked {
+  color: #111111;
+  background: #f1f1f1;
+}
+
+/* ==================== DATE / INPUTS PROPOSTAS ==================== */
+
+.admin-form input[type="date"] {
+  color-scheme: dark;
+}
+
+body.admin-light .admin-form input[type="date"] {
+  color-scheme: light;
+}
+
 /* ==================== RESPONSIVO ==================== */
 
 @media (max-width: 1280px) {

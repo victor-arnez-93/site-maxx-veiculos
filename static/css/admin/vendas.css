@@ -1,6 +1,6 @@
 /* ============================================================
-   MAXX VEÍCULOS — DOCUMENTOS.CSS
-   CRM · Documentação Veicular
+   MAXX VEÍCULOS — VENDAS.CSS
+   CRM · Vendas · Fechamento Comercial
    Mesmo padrão visual do Dashboard/Estoque
    ============================================================ */
 
@@ -48,7 +48,7 @@
 
 /* ==================== FILTROS ==================== */
 
-.admin-filters.documentos-filters {
+.admin-filters.vendas-filters {
   display: grid;
   grid-template-columns: 1.7fr repeat(3, minmax(170px, 1fr));
   gap: 12px;
@@ -64,8 +64,8 @@
     rgba(5,5,5,.34);
 }
 
-.documentos-filters input,
-.documentos-filters select {
+.vendas-filters input,
+.vendas-filters select {
   width: 100%;
   height: 46px;
 
@@ -84,7 +84,7 @@
   transition: var(--trans);
 }
 
-.documentos-filters select {
+.vendas-filters select {
   appearance: none;
   -webkit-appearance: none;
 
@@ -98,25 +98,25 @@
   background-position: right 15px center;
 }
 
-.documentos-filters input::placeholder {
+.vendas-filters input::placeholder {
   color: var(--muted-2);
 }
 
-.documentos-filters input:focus,
-.documentos-filters select:focus {
+.vendas-filters input:focus,
+.vendas-filters select:focus {
   border-color: var(--primary-line);
   background: var(--primary-dim);
   box-shadow: 0 0 0 3px rgba(255,59,47,.08);
 }
 
-.documentos-filters option {
+.vendas-filters option {
   background: #181818;
   color: #fff;
 }
 
 /* ==================== TABELA ==================== */
 
-.documentos-table-wrap {
+.vendas-table-wrap {
   max-height: 520px;
   overflow: auto;
 
@@ -124,21 +124,21 @@
   border: 1px solid var(--line);
 }
 
-.documentos-table {
+.vendas-table {
   width: 100%;
-  min-width: 1050px;
+  min-width: 1180px;
 
   border-collapse: collapse;
   background: rgba(5,5,5,.34);
 }
 
-.documentos-table thead {
+.vendas-table thead {
   position: sticky;
   top: 0;
   z-index: 5;
 }
 
-.documentos-table th {
+.vendas-table th {
   padding: 15px 14px;
 
   color: var(--primary);
@@ -155,7 +155,7 @@
   border-bottom: 1px solid var(--line);
 }
 
-.documentos-table td {
+.vendas-table td {
   padding: 16px 14px;
 
   color: var(--text);
@@ -164,56 +164,65 @@
   vertical-align: middle;
 }
 
-.documentos-table tr:last-child td {
+.vendas-table tr:last-child td {
   border-bottom: none;
 }
 
-.documentos-table tbody tr {
+.vendas-table tbody tr {
   height: 78px;
   transition: var(--trans);
 }
 
-.documentos-table tbody tr:hover {
+.vendas-table tbody tr:hover {
   background: rgba(255,59,47,.045);
 }
 
-.documentos-table-wrap::-webkit-scrollbar {
+.vendas-table-wrap::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-.documentos-table-wrap::-webkit-scrollbar-thumb {
+.vendas-table-wrap::-webkit-scrollbar-thumb {
   border-radius: 999px;
   background: color-mix(in srgb, var(--dynamic-primary) 45%, transparent);
 }
 
-/* ==================== DOCUMENTO ==================== */
+/* ==================== VENDA ==================== */
 
-.documento-info,
-.documento-veiculo {
+.venda-info,
+.venda-cliente,
+.venda-veiculo {
   display: grid;
   gap: 4px;
 }
 
-.documento-info strong,
-.documento-veiculo strong {
+.venda-info strong,
+.venda-cliente strong,
+.venda-veiculo strong {
   color: var(--white);
   font-family: var(--font-display);
   font-size: 15px;
   font-weight: 700;
 }
 
-.documento-info span,
-.documento-veiculo span {
+.venda-info span,
+.venda-cliente span,
+.venda-veiculo span {
   color: var(--muted);
   font-size: 12.5px;
 }
 
-.documento-tipo {
+.venda-valor {
+  color: #7cff9b;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.venda-pagamento {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
 
   width: fit-content;
   padding: 7px 12px;
@@ -230,56 +239,63 @@
   text-transform: uppercase;
 }
 
-.documento-tipo::before {
+.venda-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  min-width: 120px;
+  padding: 7px 12px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .9px;
+  text-transform: uppercase;
+}
+
+.venda-status::before {
   content: '';
+
   width: 6px;
   height: 6px;
 
   border-radius: 50%;
-  background: var(--dynamic-primary);
-  box-shadow: 0 0 10px var(--dynamic-primary);
+  background: currentColor;
+
+  box-shadow: 0 0 10px currentColor;
 }
 
-.documento-data {
+.venda-status.concluida {
+  color: #7cff9b;
+  background: rgba(74,222,128,.12);
+  border: 1px solid rgba(74,222,128,.35);
+}
+
+.venda-status.cancelada {
+  color: #ffb7b0;
+  background: rgba(248,113,113,.12);
+  border: 1px solid rgba(248,113,113,.35);
+}
+
+.venda-data {
   color: var(--text);
   font-size: 13px;
 }
 
-.documentos-table .admin-actions {
+.vendas-table .admin-actions {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 8px;
 }
 
-.admin-icon-btn {
-  width: 38px;
-  height: 38px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line-2);
-
-  color: var(--muted);
-  background: rgba(255,255,255,.045);
-
-  transition: var(--trans);
-}
-
-.admin-icon-btn:hover {
-  color: var(--white);
-  background: var(--primary-dim);
-  border-color: var(--primary-line);
-  transform: translateY(-2px);
-}
-
 /* ==================== FORM / MODAL ==================== */
 
-#documentoModal .admin-modal-card {
-  max-width: 980px;
+#vendaModal .admin-modal-card {
+  max-width: 1100px;
 }
 
 .admin-form {
@@ -353,11 +369,8 @@
   resize: vertical;
 }
 
-.admin-form input[type="file"] {
-  height: auto;
-  min-height: 54px;
-  padding: 14px 15px;
-  cursor: pointer;
+.admin-form input[type="date"] {
+  color-scheme: dark;
 }
 
 .admin-form input:focus,
@@ -368,37 +381,105 @@
   box-shadow: 0 0 0 3px rgba(255,59,47,.08);
 }
 
-.documento-preview {
-  display: grid;
-  gap: 8px;
+/* ==================== SWITCHES ==================== */
 
-  padding: 16px;
-
-  border-radius: var(--radius-md);
-  border: 1px solid var(--line);
-
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02)),
-    rgba(255,255,255,.025);
+.admin-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
 }
 
-.documento-preview span {
+.admin-checks label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  cursor: pointer;
+}
+
+.admin-checks input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 52px;
+  height: 30px;
+  min-height: 30px;
+
+  position: relative;
+
+  border-radius: 999px;
+  border: 1px solid var(--line);
+
+  background: rgba(255,255,255,.08);
+
+  cursor: pointer;
+  transition: var(--trans);
+}
+
+.admin-checks input[type="checkbox"]::before {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  left: 4px;
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 50%;
+  background: var(--muted);
+
+  transform: translateY(-50%);
+  transition: var(--trans);
+}
+
+.admin-checks input[type="checkbox"]:checked {
+  background: rgba(74,222,128,.18);
+  border-color: rgba(74,222,128,.40);
+}
+
+.admin-checks input[type="checkbox"]:checked::before {
+  left: 25px;
+  background: #4ade80;
+  box-shadow: 0 0 14px rgba(74,222,128,.45);
+}
+
+.admin-checks span {
   color: var(--muted);
-  font-size: 12px;
+
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
 
-.documento-preview a {
-  color: var(--primary-2);
-  font-size: 14px;
-  font-weight: 800;
+.admin-icon-btn {
+  width: 38px;
+  height: 38px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-2);
+
+  color: var(--muted);
+  background: rgba(255,255,255,.045);
+
+  transition: var(--trans);
+}
+
+.admin-icon-btn:hover {
+  color: var(--white);
+  background: var(--primary-dim);
+  border-color: var(--primary-line);
+  transform: translateY(-2px);
 }
 
 /* ==================== EMPTY ==================== */
 
-#documentosEmpty {
+#vendasEmpty {
   display: none;
 }
 
@@ -413,8 +494,8 @@ body.admin-light .admin-panel {
   border-color: rgba(0,0,0,.10);
 }
 
-body.admin-light .admin-filters.documentos-filters,
-body.admin-light .documentos-table {
+body.admin-light .admin-filters.vendas-filters,
+body.admin-light .vendas-table {
   background:
     linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.82)),
     rgba(255,255,255,.9);
@@ -422,8 +503,8 @@ body.admin-light .documentos-table {
   border-color: rgba(0,0,0,.10);
 }
 
-body.admin-light .documentos-filters input,
-body.admin-light .documentos-filters select,
+body.admin-light .vendas-filters input,
+body.admin-light .vendas-filters select,
 body.admin-light .admin-form input,
 body.admin-light .admin-form select,
 body.admin-light .admin-form textarea {
@@ -432,30 +513,39 @@ body.admin-light .admin-form textarea {
   border-color: rgba(0,0,0,.14);
 }
 
-body.admin-light .documentos-filters option,
+body.admin-light .vendas-filters option,
 body.admin-light .admin-form option {
   color: #111;
   background: #fff;
 }
 
-body.admin-light .documentos-table th {
+body.admin-light .admin-form input[type="date"] {
+  color-scheme: light;
+}
+
+body.admin-light .vendas-table th {
   color: color-mix(in srgb, var(--dynamic-primary) 78%, #111);
   background: rgba(0,0,0,.055);
 }
 
-body.admin-light .documento-info strong,
-body.admin-light .documento-veiculo strong {
+body.admin-light .venda-info strong,
+body.admin-light .venda-cliente strong,
+body.admin-light .venda-veiculo strong {
   color: #111;
+}
+
+body.admin-light .admin-checks span {
+  color: #4b5563;
 }
 
 /* ==================== RESPONSIVO ==================== */
 
 @media (max-width: 1280px) {
-  .admin-filters.documentos-filters {
+  .admin-filters.vendas-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .documentos-filters input {
+  .vendas-filters input {
     grid-column: 1 / -1;
   }
 
@@ -465,24 +555,29 @@ body.admin-light .documento-veiculo strong {
 }
 
 @media (max-width: 720px) {
-  .admin-filters.documentos-filters {
+  .admin-filters.vendas-filters {
     grid-template-columns: 1fr;
     padding: 16px;
   }
 
-  .documentos-filters input {
+  .vendas-filters input {
     grid-column: auto;
   }
 
-  .documentos-table {
-    min-width: 900px;
+  .vendas-table {
+    min-width: 1050px;
   }
 
   .admin-form-grid {
     grid-template-columns: 1fr;
   }
 
-  #documentoModal .admin-modal-card {
+  #vendaModal .admin-modal-card {
     max-width: calc(100vw - 24px);
+  }
+
+  .admin-checks {
+    flex-direction: column;
+    gap: 14px;
   }
 }

@@ -471,6 +471,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let fotosModal = [];
 let fotoAtual = 0;
+let veiculoAtual = null;
+
 
 function atualizarFotoModal() {
   const imgModal = document.getElementById('vehicleModalImage');
@@ -507,6 +509,7 @@ function fecharModalRapido() {
 }
 
 function abrirModalVeiculo(veiculo) {
+veiculoAtual = veiculo;
 
   const capa = MAXX.getVehicleImage(veiculo);
 
@@ -574,6 +577,27 @@ function abrirModalVeiculo(veiculo) {
 
   document.getElementById('vehicleModalWhatsApp').href =
     MAXX.waLink(mensagem);
+
+    const interesseBtn =
+  document.getElementById('vehicleModalInterest');
+
+if (interesseBtn) {
+
+  interesseBtn.onclick = () => {
+
+    document.getElementById('leadPublicVeiculoId').value =
+      veiculo.id;
+
+    document.getElementById('vehicleLeadTitle').textContent =
+      titulo;
+
+    document.getElementById('vehicleLeadSubtitle').textContent =
+      `Preencha seus dados para receber atendimento sobre ${titulo}.`;
+
+    document.getElementById('vehicleLeadModal')
+      .classList.add('open');
+  };
+}
 
   const thumbs =
     document.getElementById('vehicleGalleryThumbs');
@@ -726,6 +750,39 @@ document.getElementById('vehicleLightboxClose')
       .classList.remove('open');
   });
 
+document.getElementById('vehicleLeadClose')
+  ?.addEventListener('click', () => {
+
+    document.getElementById('vehicleLeadModal')
+      .classList.remove('open');
+  });
+
+document.querySelector('[data-close-lead-modal]')
+  ?.addEventListener('click', () => {
+
+    document.getElementById('vehicleLeadModal')
+      .classList.remove('open');
+  });
+
+document.getElementById('vehicleLeadForm')
+  ?.addEventListener('submit', salvarLeadPublico);
+
+  document.getElementById('leadPublicTelefone')
+  ?.addEventListener('input', (event) => {
+    event.target.value = mascararTelefonePublico(event.target.value);
+  });
+
+document.getElementById('leadPublicNome')
+  ?.addEventListener('blur', (event) => {
+    event.target.value = capitalizarNomePublico(event.target.value);
+  });
+
+document.getElementById('siteFeedbackOk')
+  ?.addEventListener('click', () => {
+    document.getElementById('siteFeedbackModal')
+      ?.classList.remove('open');
+  });
+
 document.querySelector('[data-close-lightbox]')
   ?.addEventListener('click', () => {
     document.getElementById('vehicleLightbox')
@@ -756,6 +813,138 @@ document.getElementById('vehicleLightboxNext')
     atualizarFotoModal();
   });
   }
+
+async function obterEmpresaPublicaId() {
+
+  const supabase = getSupabaseClient();
+
+  const { data, error } = await supabase
+    .from('empresas')
+    .select('id')
+    .eq('slug', 'maxx-veiculos')
+    .eq('ativa', true)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data?.id || null;
+}
+
+function capitalizarNomePublico(valor) {
+  return String(valor || '')
+    .trim()
+    .toLowerCase()
+    .split(' ')
+    .filter(Boolean)
+    .map((parte) => {
+      const excecoes = ['de', 'da', 'do', 'das', 'dos', 'e'];
+      if (excecoes.includes(parte)) return parte;
+      return parte.charAt(0).toUpperCase() + parte.slice(1);
+    })
+    .join(' ');
+}
+
+function mascararTelefonePublico(valor) {
+  const numeros = String(valor || '').replace(/\D/g, '').slice(0, 11);
+
+  if (numeros.length <= 10) {
+    return numeros
+      .replace(/^(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{4})(\d)/, '$1-$2');
+  }
+
+  return numeros
+    .replace(/^(\d{2})(\d)/, '($1) $2')
+    .replace(/(\d{5})(\d)/, '$1-$2');
+}
+
+function abrirFeedbackSite(titulo, texto) {
+  document.getElementById('siteFeedbackTitle').textContent = titulo;
+  document.getElementById('siteFeedbackText').textContent = texto;
+  document.getElementById('siteFeedbackModal').classList.add('open');
+}
+
+async function salvarLeadPublico(event) {
+
+  event.preventDefault();
+
+  const supabase = getSupabaseClient();
+
+  const empresaId =
+    await obterEmpresaPublicaId();
+
+  if (!empresaId) {
+    alert('Empresa não encontrada.');
+    return;
+  }
+
+const nome =
+  document.getElementById('leadPublicNome')
+    .value
+    .trim();
+
+const telefone =
+  document.getElementById('leadPublicTelefone')
+    .value
+    .trim();
+
+if (!nome) {
+  abrirFeedbackSite('Nome obrigatório', 'Informe seu nome para continuar.');
+  return;
+}
+
+if (!telefone) {
+  abrirFeedbackSite('Telefone obrigatório', 'Informe seu WhatsApp para nossa equipe retornar.');
+  return;
+}
+
+  const payload = {
+
+    empresa_id: empresaId,
+
+    veiculo_id:
+      document.getElementById('leadPublicVeiculoId').value,
+
+    nome:
+      document.getElementById('leadPublicNome').value.trim(),
+
+    telefone:
+      document.getElementById('leadPublicTelefone').value.trim(),
+
+    email:
+      document.getElementById('leadPublicEmail').value.trim(),
+
+    mensagem:
+      document.getElementById('leadPublicMensagem').value.trim(),
+
+    origem: 'site',
+
+    etapa: 'novo'
+  };
+
+  const { error } = await supabase
+    .from('leads')
+    .insert(payload);
+
+  if (error) {
+    console.error(error);
+    abrirFeedbackSite('Erro ao enviar', 'Não foi possível enviar seu interesse agora. Tente novamente.');
+    return;
+  }
+
+  document.getElementById('vehicleLeadForm').reset();
+
+  document.getElementById('vehicleLeadModal')
+    .classList.remove('open');
+
+abrirFeedbackSite(
+  'Interesse enviado',
+  'Recebemos seu interesse. Nossa equipe entrará em contato em breve.'
+);
+}
 
   init();
 });

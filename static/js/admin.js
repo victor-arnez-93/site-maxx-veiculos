@@ -226,12 +226,12 @@ function somarValores(lista, campos) {
 
 function calcularFunil(leads, propostas) {
   const novos = leads.filter((lead) => {
-    const status = normalizarStatus(lead.status);
+    const status = normalizarStatus(lead.etapa || lead.status);
     return !status || ['novo', 'recebido', 'pendente'].includes(status);
   }).length;
 
   const atendimento = leads.filter((lead) => {
-    const status = normalizarStatus(lead.status);
+    const status = normalizarStatus(lead.etapa || lead.status);
     return ['atendimento', 'em atendimento', 'contato', 'em contato', 'negociacao', 'negociação'].includes(status);
   }).length;
 

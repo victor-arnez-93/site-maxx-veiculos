@@ -6,6 +6,8 @@
 let leads = [];
 let veiculos = [];
 let empresaIdAtual = null;
+let leadsAutoRefreshTimer = null;
+let carregandoLeads = false;
 
 async function protegerAdmin() {
   if (!window.MAXX_SUPABASE) {
@@ -165,6 +167,9 @@ async function carregarVeiculosSelect() {
 }
 
 async function carregarLeads() {
+  if (carregandoLeads) return;
+
+  carregandoLeads = true;
   const { data, error } = await window.MAXX_SUPABASE
     .from('leads')
     .select('*')
@@ -173,7 +178,7 @@ async function carregarLeads() {
 
   if (error) {
     console.error(error);
-    alert('Erro ao carregar leads.');
+    carregandoLeads = false;
     return;
   }
 
@@ -181,6 +186,8 @@ async function carregarLeads() {
 
   popularFiltroOrigem();
   renderizarLeads();
+
+  carregandoLeads = false;
 }
 
 function obterDadosFormulario() {
@@ -499,4 +506,8 @@ leadForm?.addEventListener('submit', async (event) => {
 
   await carregarVeiculosSelect();
   await carregarLeads();
+
+  leadsAutoRefreshTimer = setInterval(async () => {
+    await carregarLeads();
+  }, 30000);
 })();

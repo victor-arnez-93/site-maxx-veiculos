@@ -755,6 +755,84 @@ body.admin-light .admin-modal-head button {
   border-color: rgba(0,0,0,.12);
 }
 
+/* ==================== MENU CRM AGRUPADO ==================== */
+
+.admin-menu-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin: 22px 0 8px;
+  padding: 0 12px;
+
+  color: var(--dynamic-primary);
+
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+
+  opacity: .95;
+}
+
+.admin-menu-label::before {
+  content: '';
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--dynamic-primary);
+
+  box-shadow:
+    0 0 10px var(--dynamic-primary),
+    0 0 20px color-mix(
+      in srgb,
+      var(--dynamic-primary) 60%,
+      transparent
+    );
+}
+
+.admin-menu-label::after {
+  content: '';
+
+  flex: 1;
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(
+        in srgb,
+        var(--dynamic-primary) 55%,
+        transparent
+      ),
+      transparent
+    );
+}
+
+.admin-menu-label:first-of-type {
+  margin-top: 10px;
+}
+
+body.admin-light .admin-menu-label {
+  color: color-mix(
+    in srgb,
+    var(--dynamic-primary) 75%,
+    #000
+  );
+}
+
+body.admin-light .admin-menu-label::before {
+  box-shadow:
+    0 0 8px color-mix(
+      in srgb,
+      var(--dynamic-primary) 45%,
+      transparent
+    );
+}
+
 /* ==================== RESPONSIVO ==================== */
 
 @media (max-width: 1280px) {

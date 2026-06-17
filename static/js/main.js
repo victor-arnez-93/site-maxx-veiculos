@@ -159,13 +159,7 @@ const statusTexto = vendido
             onerror="this.onerror=null;this.src='static/img/sem-foto.jpg';"
           >
 
-                  ${vendido ? `
-        <div class="v-card-sold-overlay">
-          VENDIDO
-        </div>
-        ` : ''}
-
-        ${vendido ? `
+${vendido ? `
   <div class="v-card-sold-overlay">VENDIDO</div>
 ` : reservado ? `
   <div class="v-card-reserved-overlay">RESERVADO</div>

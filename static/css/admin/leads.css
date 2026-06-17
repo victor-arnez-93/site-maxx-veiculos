@@ -951,6 +951,88 @@ body.admin-light .cfx-hist .i {
   color: #5b6270;
 }
 
+/* ==================== LIMITES / SCROLL INTERNO LEADS ==================== */
+
+.leads-table-wrap {
+  max-height: 520px;
+  overflow: auto;
+}
+
+.cfx-panel.active {
+  max-height: 560px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.cfx-board {
+  min-width: 1120px;
+  max-height: 540px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.cfx-col {
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.cfx-at {
+  max-height: 540px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.cfx-col::-webkit-scrollbar,
+.cfx-at::-webkit-scrollbar,
+.cfx-panel.active::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.cfx-col::-webkit-scrollbar-thumb,
+.cfx-at::-webkit-scrollbar-thumb,
+.cfx-panel.active::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--dynamic-primary) 45%, transparent);
+}
+
+.cfx-col::-webkit-scrollbar-track,
+.cfx-at::-webkit-scrollbar-track,
+.cfx-panel.active::-webkit-scrollbar-track {
+  background: rgba(255,255,255,.04);
+}
+
+/* ==================== SELECT TEMPERATURA ==================== */
+
+.cfx-sel.cfx-temp {
+  color: var(--white);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03)),
+    rgba(255,255,255,.045);
+}
+
+.cfx-sel.cfx-temp option {
+  color: #111;
+  background: #fff;
+}
+
+body:not(.admin-light) .cfx-sel.cfx-temp option {
+  color: #fff;
+  background: #161616;
+}
+
+.cfx-sel.cfx-temp option[value="frio"] {
+  color: #60a5fa;
+}
+
+.cfx-sel.cfx-temp option[value="morno"] {
+  color: #fbbf24;
+}
+
+.cfx-sel.cfx-temp option[value="quente"] {
+  color: #fb7185;
+}
+
 /* ==================== RESPONSIVO (MOBILE COMPLETO) ==================== */
 
 @media (max-width: 1280px) {

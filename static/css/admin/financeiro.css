@@ -415,6 +415,22 @@
   transition: var(--trans);
 }
 
+.admin-form select {
+  appearance: none;
+  cursor: pointer;
+
+  padding-right: 40px;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath fill='none' stroke='%23ff3b2f' stroke-width='1.6' stroke-linecap='round' d='M1 1l4.5 4.5L10 1'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+}
+
+.admin-form select option {
+  background: #181818;
+  color: #ffffff;
+}
+
 .admin-form textarea {
   min-height: 104px;
   padding: 14px 15px;
@@ -460,6 +476,11 @@ body.admin-light .admin-form textarea {
   border-color: rgba(0,0,0,.14);
 }
 
+body.admin-light .admin-form select option {
+  background: #ffffff;
+  color: #111111;
+}
+
 body.admin-light .financeiro-table th {
   color: color-mix(in srgb, var(--dynamic-primary) 78%, #111);
   background: rgba(0,0,0,.055);
@@ -467,6 +488,93 @@ body.admin-light .financeiro-table th {
 
 body.admin-light .financeiro-table tbody tr:hover {
   background: color-mix(in srgb, var(--dynamic-primary) 8%, #fff);
+}
+
+/* ==================== CHECKBOX / PAGO ==================== */
+
+.admin-checks {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  margin-top: -2px;
+}
+
+.admin-checks label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  width: fit-content;
+  min-height: 44px;
+
+  cursor: pointer;
+}
+
+.admin-checks input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 52px;
+  height: 30px;
+  min-height: 30px;
+
+  position: relative;
+
+  border-radius: 999px;
+  border: 1px solid var(--line);
+
+  background: rgba(255,255,255,.08);
+
+  cursor: pointer;
+  transition: var(--trans);
+}
+
+.admin-checks input[type="checkbox"]::before {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  left: 4px;
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 50%;
+
+  background: var(--muted);
+  transform: translateY(-50%);
+
+  transition: var(--trans);
+}
+
+.admin-checks input[type="checkbox"]:checked {
+  border-color: rgba(34,197,94,.42);
+  background: rgba(34,197,94,.18);
+}
+
+.admin-checks input[type="checkbox"]:checked::before {
+  left: 25px;
+  background: #25d366;
+  box-shadow: 0 0 18px rgba(37,211,102,.45);
+}
+
+.admin-checks span {
+  color: var(--muted);
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+body.admin-light .admin-checks input[type="checkbox"] {
+  background: rgba(0,0,0,.08);
+  border-color: rgba(0,0,0,.14);
+}
+
+body.admin-light .admin-checks span {
+  color: #4b5563;
 }
 
 /* ==================== RESPONSIVO ==================== */

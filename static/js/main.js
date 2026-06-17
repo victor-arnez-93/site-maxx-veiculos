@@ -126,9 +126,24 @@ const MAXX = {
     const preco = this.formatMoney(veiculo.preco || 0);
     const imagem = this.esc(this.getVehicleImage(veiculo));
 
-    const vendido = veiculo.vendido === true;
-    const statusClasse = vendido ? 'chip-sold' : 'chip-available';
-    const statusTexto = vendido ? 'Vendido' : 'Disponível';
+const statusVeiculo = String(
+  veiculo.status || (veiculo.vendido === true ? 'vendido' : 'disponivel')
+).toLowerCase();
+
+const vendido = statusVeiculo === 'vendido';
+const reservado = statusVeiculo === 'reservado';
+
+const statusClasse = vendido
+  ? 'chip-sold'
+  : reservado
+    ? 'chip-reserved'
+    : 'chip-available';
+
+const statusTexto = vendido
+  ? 'Vendido'
+  : reservado
+    ? 'Reservado'
+    : 'Disponível';
 
     const nomeCompleto = `${marcaRaw} ${modeloRaw} ${versaoRaw} ${ano}`.trim();
 
@@ -144,7 +159,19 @@ const MAXX = {
             onerror="this.onerror=null;this.src='static/img/sem-foto.jpg';"
           >
 
-          <span class="v-card-photos">Fotos</span>
+                  ${vendido ? `
+        <div class="v-card-sold-overlay">
+          VENDIDO
+        </div>
+        ` : ''}
+
+        ${vendido ? `
+  <div class="v-card-sold-overlay">VENDIDO</div>
+` : reservado ? `
+  <div class="v-card-reserved-overlay">RESERVADO</div>
+` : ''}
+
+<span class="v-card-photos">Fotos</span>
         </button>
 
         <div class="v-card-body">

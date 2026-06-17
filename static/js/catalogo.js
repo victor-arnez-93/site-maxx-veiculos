@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
       .from('veiculos')
       .select('*')
       .eq('ativo', true)
-      .eq('vendido', false)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -104,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       ativo: v.ativo !== false,
       destaque: v.destaque === true,
-      vendido: v.vendido === true,
+      status: v.status || (v.vendido === true ? 'vendido' : 'disponivel'),
+      vendido: v.status === 'vendido' || v.vendido === true,
 
       foto_capa: v.foto_capa || '',
       galeria: Array.isArray(v.galeria) ? v.galeria : [],

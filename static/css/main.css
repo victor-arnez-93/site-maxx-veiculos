@@ -576,6 +576,42 @@ textarea.input {
   flex-wrap: wrap;
 }
 
+.v-card-sold-overlay {
+  position: absolute;
+  inset: 50% auto auto 50%;
+
+  transform: translate(-50%, -50%) rotate(-8deg);
+
+  z-index: 5;
+
+  padding: 14px 40px;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff2b2b,
+      #c50000
+    );
+
+  border: 2px solid rgba(255,255,255,.25);
+
+  color: #fff;
+
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
+
+  box-shadow:
+    0 15px 35px rgba(197,0,0,.45);
+
+  pointer-events: none;
+}
+
 .chip {
   display: inline-flex;
   align-items: center;
@@ -1223,6 +1259,72 @@ textarea.input {
 
 .nav-burger span {
   background: #111;
+}
+
+/* ==================== STATUS VISUAL VEÍCULO ==================== */
+
+.v-card-sold-overlay,
+.v-card-reserved-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 5;
+
+  transform: translate(-50%, -50%) rotate(-8deg);
+
+  padding: 13px 38px;
+
+  border-radius: 14px;
+
+  color: #fff;
+
+  font-family: var(--font-display);
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
+
+  border: 2px solid rgba(255,255,255,.26);
+
+  pointer-events: none;
+}
+
+.v-card-sold-overlay {
+  background: linear-gradient(135deg, #ff2b2b, #b90000);
+  box-shadow: 0 15px 35px rgba(185,0,0,.45);
+}
+
+.v-card-reserved-overlay {
+  background: linear-gradient(135deg, #f59e0b, #b45309);
+  box-shadow: 0 15px 35px rgba(180,83,9,.38);
+}
+
+.chip-sold {
+  color: #ffb7b0;
+  border-color: rgba(255,59,47,.42);
+  background: rgba(255,59,47,.14);
+}
+
+.chip-reserved {
+  color: #ffd166;
+  border-color: rgba(245,158,11,.42);
+  background: rgba(245,158,11,.14);
+}
+
+.chip-available {
+  color: #7cff9b;
+  border-color: rgba(37,211,102,.38);
+  background: rgba(37,211,102,.12);
+}
+
+@media (max-width: 720px) {
+  .v-card-sold-overlay,
+  .v-card-reserved-overlay {
+    padding: 10px 28px;
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
 }
 
 /* ==================== RESPONSIVO GLOBAL — MOBILE FORTE ==================== */

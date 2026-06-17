@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
       .from('veiculos')
       .select('*')
       .eq('ativo', true)
-      .eq('vendido', false)
       .order('created_at', { ascending: false });
 
     if (error) {

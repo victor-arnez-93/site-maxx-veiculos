@@ -1,6 +1,6 @@
 /* ============================================================
    MAXX VEÍCULOS — LEADS.CSS
-   CRM · Funil Comercial
+   CRM · Funil Comercial · Sub-abas (Lista | Funil | Atendimento)
    Mesmo padrão visual do Dashboard/Estoque
    ============================================================ */
 
@@ -526,6 +526,292 @@
   color: var(--white);
 }
 
+/* ==================== SUB-ABAS (LISTA | FUNIL | ATENDIMENTO) ==================== */
+
+.cfx-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 18px;
+}
+
+.cfx-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  height: 42px;
+  padding: 0 18px;
+
+  border-radius: 999px;
+  border: 1px solid var(--line);
+
+  color: var(--muted);
+  background: rgba(255,255,255,.045);
+
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .4px;
+
+  cursor: pointer;
+  transition: var(--trans);
+}
+
+.cfx-tab:hover {
+  color: var(--white);
+  border-color: var(--primary-line);
+}
+
+.cfx-tab.active {
+  color: #fff;
+  background: var(--dynamic-primary, var(--primary));
+  border-color: var(--dynamic-primary, var(--primary));
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--dynamic-primary) 35%, transparent);
+}
+
+.cfx-panel {
+  display: none;
+}
+
+.cfx-panel.active {
+  display: block;
+}
+
+/* ---- Funil (Kanban) ---- */
+
+.cfx-board {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(190px, 1fr));
+  gap: 12px;
+
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.cfx-col {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 140px;
+  padding: 12px;
+
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: rgba(5,5,5,.34);
+
+  transition: var(--trans);
+}
+
+.cfx-col.drag {
+  border-color: var(--primary-line);
+  background: var(--primary-dim);
+}
+
+.cfx-col-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.cfx-col-h .n {
+  padding: 1px 9px;
+
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cfx-empty {
+  color: var(--muted-2);
+  font-size: 12px;
+}
+
+.cfx-card {
+  padding: 11px 12px;
+  margin-bottom: 9px;
+
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-2);
+  background: rgba(255,255,255,.05);
+
+  cursor: grab;
+  transition: var(--trans);
+}
+
+.cfx-card:hover {
+  border-color: var(--primary-line);
+  transform: translateY(-1px);
+}
+
+.cfx-card:active {
+  cursor: grabbing;
+}
+
+.cfx-card b {
+  display: block;
+  margin-bottom: 3px;
+
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 14px;
+}
+
+.cfx-card small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cfx-card .cfx-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 7px;
+
+  color: #25d366;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ---- Atendimento (follow-up + WhatsApp + histórico) ---- */
+
+.cfx-at {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cfx-at-row {
+  display: grid;
+  grid-template-columns: 1.5fr 150px 160px auto auto;
+  gap: 12px;
+  align-items: center;
+
+  padding: 12px 14px;
+
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.045);
+}
+
+.cfx-at-row.atrasado {
+  border-color: var(--primary-line);
+  background: var(--primary-dim);
+}
+
+.cfx-at-row .nome b {
+  display: block;
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 14px;
+}
+
+.cfx-at-row .nome small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cfx-sel,
+.cfx-date {
+  height: 42px;
+  padding: 0 12px;
+
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.045);
+
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 13px;
+
+  outline: none;
+  transition: var(--trans);
+}
+
+.cfx-sel {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 30px;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath fill='none' stroke='%23ff3b2f' stroke-width='1.6' stroke-linecap='round' d='M1 1l4.5 4.5L10 1'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+}
+
+.cfx-sel:focus,
+.cfx-date:focus {
+  border-color: var(--primary-line);
+  background: var(--primary-dim);
+}
+
+.cfx-btn {
+  height: 42px;
+  padding: 0 16px;
+
+  border: 0;
+  border-radius: 999px;
+
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: var(--trans);
+}
+
+.cfx-btn.wa {
+  background: #25d366;
+  color: #04210f;
+}
+
+.cfx-btn.wa:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.cfx-btn.hist {
+  border: 1px solid var(--line-2);
+  background: rgba(255,255,255,.07);
+  color: var(--text);
+}
+
+.cfx-btn.hist:hover {
+  border-color: var(--primary-line);
+  color: var(--white);
+}
+
+.cfx-hist {
+  grid-column: 1 / -1;
+  display: none;
+
+  margin-top: 10px;
+  padding-top: 10px;
+
+  border-top: 1px dashed var(--line-2);
+}
+
+.cfx-hist.open {
+  display: block;
+}
+
+.cfx-hist .i {
+  padding: 3px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 /* ==================== TEMA CLARO ==================== */
 
 body.admin-light .admin-quick,
@@ -613,7 +899,59 @@ body.admin-light .admin-empty {
   border-color: rgba(0,0,0,.16);
 }
 
-/* ==================== RESPONSIVO ==================== */
+/* ---- Sub-abas no tema claro ---- */
+
+body.admin-light .cfx-tab {
+  color: #1f1f24;
+  background: rgba(255,255,255,.9);
+  border-color: rgba(0,0,0,.14);
+}
+
+body.admin-light .cfx-col {
+  background: rgba(255,255,255,.86);
+  border-color: rgba(0,0,0,.10);
+}
+
+body.admin-light .cfx-card {
+  background: #fff;
+  border-color: rgba(0,0,0,.12);
+}
+
+body.admin-light .cfx-card b {
+  color: #111;
+}
+
+body.admin-light .cfx-card small {
+  color: #5b6270;
+}
+
+body.admin-light .cfx-at-row {
+  background: rgba(255,255,255,.9);
+  border-color: rgba(0,0,0,.10);
+}
+
+body.admin-light .cfx-at-row .nome b {
+  color: #111;
+}
+
+body.admin-light .cfx-sel,
+body.admin-light .cfx-date {
+  color: #111;
+  background: #fff;
+  border-color: rgba(0,0,0,.14);
+}
+
+body.admin-light .cfx-btn.hist {
+  color: #1f1f24;
+  background: rgba(255,255,255,.9);
+  border-color: rgba(0,0,0,.14);
+}
+
+body.admin-light .cfx-hist .i {
+  color: #5b6270;
+}
+
+/* ==================== RESPONSIVO (MOBILE COMPLETO) ==================== */
 
 @media (max-width: 1280px) {
   .admin-filters.leads-filters {
@@ -626,6 +964,16 @@ body.admin-light .admin-empty {
 
   .admin-form-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  .cfx-at-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cfx-at-row .nome {
+    grid-column: 1 / -1;
   }
 }
 
@@ -678,5 +1026,47 @@ body.admin-light .admin-empty {
 
   .lead-preview {
     max-width: 190px;
+  }
+
+  /* sub-abas */
+  .cfx-tabs {
+    gap: 6px;
+  }
+
+  .cfx-tab {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 0 12px;
+  }
+
+  .cfx-board {
+    grid-template-columns: repeat(6, minmax(158px, 1fr));
+    gap: 10px;
+  }
+
+  .cfx-at-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .cfx-at-row .cfx-sel,
+  .cfx-at-row .cfx-date,
+  .cfx-at-row .cfx-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .cfx-tab {
+    height: 40px;
+    font-size: 12.5px;
+  }
+
+  .cfx-board {
+    grid-template-columns: repeat(6, minmax(150px, 1fr));
+  }
+
+  .cfx-card b {
+    font-size: 13.5px;
   }
 }
